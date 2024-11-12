@@ -1,0 +1,26 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Your Notifications</h1>
+
+    {% if notifications %}
+    <ul>
+        {% for notification in notifications %}
+        <li>
+            <strong>{{ notification.message }}</strong><br>
+            <small>{{ notification.date_created }}</small>
+            {% if not notification.is_read %}
+            <span style="color: red;">(Unread)</span>
+            {% else %}
+            <span style="color: green;">(read)</span>
+
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No notifications available.</p>
+    {% endif %}
+</div>
+{% endblock %}

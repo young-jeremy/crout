@@ -1,0 +1,15 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container align-items-center">
+        <h1 class="text-center">Create New Content</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary lg">Save</button>
+        </form>
+</div>
+
+{% endblock content %}

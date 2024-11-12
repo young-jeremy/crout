@@ -1,0 +1,36 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<!-- upload_short_video.html -->
+<!-- short_video_list.html -->
+<div class="container">
+    <h1 class="text-center">Short Video List</h1>
+    {% for video in short_videos.all %}
+    {% if video %}
+    <div class="card">
+        <div class="card body">
+            <a href="{% url 'videos:short_video_list' %}">
+
+                <video controls height="700" width="320">
+                    <source src="{{ MEDIA_URL }} {{ video.video_file.url }}" type="video/mp4">
+                </video>
+            </a>
+            <h2>{{ video.title }}</h2>
+            <h2><a href="{% url 'accounts:profile' %}">
+                <img alt="...'s Channel Cover" class="img-fluid rounded-circle" height="30"
+                     src="{{ user.profile.avatar.url }}" style="length:700; width:100;" width="30">
+
+                {{ video.uploader.username }}</a></h2>
+            <p>Description </p>
+            <p>{{ video.description }}</p>
+            <p>{{ video.views }} <span>Views</span></p>
+
+        </div>
+    </div>
+
+    {% else %}
+    <p>There are no short videos, go to the short video creation page and create one</p>
+    {% endif %}
+</div>
+
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,7 @@
+<h1>Content in {{ category.name }}</h1>
+<ul>
+    {% for content in contents %}
+        <li>{{ content.title }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_content' %}">Add New Content</a>

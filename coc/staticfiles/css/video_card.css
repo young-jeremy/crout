@@ -1,0 +1,21 @@
+/* Card styles */
+        .card video-card {
+            height: 290px; /* Fixed height for the video card */
+            display: flex;
+            flex-direction: column; /* Arrange children vertically */
+        }
+
+        .card video-card img {
+        margin-top: 5;
+            max-height: 300px; /* Set a max height for the image */
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+        }
+
+        .card-body {
+            height: 100%; /* Limits the height to 80% of the viewport */
+            margin: 0; /* Removes default body margin */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }

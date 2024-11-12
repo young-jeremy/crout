@@ -1,0 +1,89 @@
+{% extends 'base_dashboard.html' %}
+{% load custom_filters %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Video Categories</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+<body>
+{% block content %}
+<div class="container mt-5 margin-left-0">
+    <!-- Tabs for Categories -->
+    <ul class="nav nav-tabs" id="categoryTabs" role="tablist">
+        {% for category in categories %}
+        <li class="nav-item">
+            <a aria-controls="content-{{ category.id }}"
+               aria-selected="{{ forloop.first|yesno:'true,false' }}"
+               class="nav-link {% if forloop.first %}active{% endif %}"
+               data-toggle="tab"
+               href="#content-{{ category.id }}"
+               id="tab-{{ category.id }}"
+               role="tab">
+                {{ category.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Tab Content for Each Category -->
+    <div class="tab-content mt-3" id="categoryTabContent">
+        {% for category in categories %}
+        <div aria-labelledby="tab-{{ category.id }}"
+             class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+             id="content-{{ category.id }}"
+             role="tabpanel">
+            <div class="row">
+                {% for content in category.contents.all %}
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <a href="{% url 'videos:video_details' content.id %}">
+                            <img alt="{{ content.title }}" class="card-img-top" src="{{ content.thumbnail.url }}" height="200" width="320">
+                        </a>
+                            <div class="card-body " >
+                            <h5 class="card-title">{{ content.title|truncatechars:20 }}</h5>
+                            <div style="display: flex; align-items: center;">
+                                <img src="{{ user.google_picture }}" width="35" height="35" class="img-fluid rounded-circle" alt="...">
+                                <p class="card-text">{{ content.uploader }}</p>
+                            </div>
+                            <p class="card-text">{{ content.views }} Views<span>•{{ content.created_at|timesince }} ago</span></p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No videos available in this category.</p>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function toggleDescription(contentId) {
+        var shortDesc = document.getElementById("description-" + contentId);
+        var fullDesc = document.getElementById("full-description-" + contentId);
+        if (shortDesc.style.display === "none") {
+            shortDesc.style.display = "block";
+            fullDesc.style.display = "none";
+        } else {
+            shortDesc.style.display = "none";
+            fullDesc.style.display = "block";
+        }
+    }
+</script>
+
+
+
+</body>
+{% endblock content %}

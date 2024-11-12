@@ -1,0 +1,20 @@
+<!-- templates/create_profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Profile</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Optional: Link your styles -->
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome!</h1>
+        <p>It looks like you don't have a profile yet. To continue, please set up your profile.</p>
+
+        <a href="{% url 'create_profile' %}" class="btn btn-primary">Create Profile</a>
+
+        <p>If you believe this is a mistake, please <a href="{% url 'contact_support' %}">contact support</a>.</p>
+    </div>
+</body>
+</html>

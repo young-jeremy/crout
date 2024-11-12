@@ -1,0 +1,23 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- 404 Error Text -->
+    <div class="text-center">
+        <div class="error mx-auto" data-text="404">File Error</div>
+        <p class="lead text-gray-800 mb-5">File Too Big</p>
+        <p class="text-gray-500 mb-0">It looks like you are trying to upload a file size which is bigger than 20mbs,
+            kindly select a file
+            that does not exceed these specifications and try again
+
+        </p>
+        <a href="{% url 'videos:upload_short_videos' %}">&larr; Back to Short Video Upload</a>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+
+{% endblock content %}

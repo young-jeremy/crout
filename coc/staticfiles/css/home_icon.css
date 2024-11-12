@@ -1,0 +1,14 @@
+.icon-home {
+    width: 32px;           /* Adjust to desired icon size */
+    height: 32px;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 50%;    /* Rounds the edges */
+    overflow: hidden;      /* Ensures the icon stays within rounded boundaries */
+    background-color: transparent; /* Ensures no visible background */
+    transition: transform 0.3s ease; /* Optional: Adds a slight hover effect */
+}
+
+.icon-home:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover to emphasize interaction */
+}

@@ -1,0 +1,16 @@
+{% extends 'base_dashboard.html' %}
+
+
+{% block content %}
+<div class="container">
+    <h5>Payments Initiated</h5>
+    {{ response_dic }}
+    <p>Check Your Phone to complete the payment process </p>
+    <p> {{ status }}</p>
+    <p> {{ message }}</p>
+    <p>do you want to pay ks {{ amount }} </p>
+    <p>from phone number {{ phone_number }}</p>
+    <p>with account reference of account_reference </p>
+    <p>for the service id {{ transaction_desc }}</p>
+</div>
+{% endblock content %}

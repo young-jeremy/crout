@@ -1,0 +1,376 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<body xmlns="http://www.w3.org/1999/html">
+<!-- Page content-->
+<div class="container">
+    <div class="row">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <div class="video-player">
+                    <video controls id="video-player" width="100%">
+                        <source src="{{ video.path.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="small text-muted "><span class="badge text-bg-primary">{{ video.category }}</span></div>
+
+                <div class="card-body">
+                    <h2 class="card-title">{{ video.title }}</h2>
+                    <div class="button-container">
+                        <img class="rounded-circle" height="35" src="{{ user.google_picture }}">
+                        <span>{{ user.google_username }}</span>
+                        <button class="rounded-top border border-dark">Subscribe</button>
+                        <button class="rounded-right border border-dark">like</button>
+                        <button class="rounded-bottom border border-dark">share</button>
+                        <button class="rounded-left border border-dark">report</button>
+                        <button class="rounded-circle border border-dark">donate</button>
+                        <button class="rounded-pill border border-dark">promote</button>
+                        <button class="rounded-circle border border-dark">&#8942;</button>
+
+                    </div>
+                    <div class="container content-container">
+                        <div class="content-preview" id="description-{{ video.id }}">
+                            <p>{{ video.views }} Views</p>
+                            <p class="card-text">{{ video.description|truncatechars:30 }}</p>
+                            {% if content.description|length > 35 %}
+                            <a href="javascript:void(0);" onclick="toggleDescription('{{ video.id }}')">Show more</a>
+                            {% endif %}
+
+                        </div>
+                        <div class="content-full" id="full-description-{{ video.id }}" style="display: none;">
+                            {{ video.description }}
+
+                            <a href="javascript:void(0);" onclick="toggleDescription('{{ video.id }}')">Show less</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="comments">
+                <h4>{{ video.comments.count }}comments</h4>
+            </div>
+            <!-- comments -->
+            <section>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <!-- Comment form-->
+                        <form action="{% url 'videos:add_comments' video.id %}" class="mb-4" method="post">
+                            {% csrf_token %}
+                            <textarea class="form-control" name="text"
+                                      placeholder="Join the discussion and leave a comment!"
+                                      rows="3">
+
+                            </textarea>
+                            <button class="btn btn-primary rounded-pill" type="submit">Add Comment</button>
+                        </form>
+                        <!-- Comment with nested comments-->
+                        <div class="d-flex mb-4">
+                            <!-- Parent comment-->
+                            <div class="flex-shrink-0"><a href="{% url 'accounts:profile' %}">
+                                <img alt="..."
+                                     class="rounded-circle"
+                                     height="45" src="{{ user.google_picture }}" width="45"/><span></span>
+                            </a>
+                            </div>
+                            <div class="ms-3">
+                                {% for comment in video.comments.all %}
+                                <div class="fw-bold">{{ user.username }}</div>
+                                {{ comment.text }}
+                                <!-- Child comment 1-->
+                                <div class="d-flex mt-4">
+                                    <div class="flex-shrink-0"><img alt="..."
+                                                                    class="rounded-circle"
+                                                                    height="35" src="{{ user.profile.avatar.url }}"
+                                                                    width="35"/>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold">{{ user.username }}</div>
+                                        <ul>
+                                            {% for comment in video.comments.all %}
+                                            <li>{{ comment.text }} - {{ comment.created_at }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Child comment 2-->
+                                <div class="d-flex mt-4">
+                                    <div class="flex-shrink-0"><img alt="..."
+                                                                    class="rounded-circle"
+                                                                    height="35" src="{{ user.profile.avatar.url }}"
+                                                                    width="35"/>
+                                    </div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold">{{ user.username }}</div>
+                                        When you put money directly to a problem, it makes a good headline.
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- Single comment-->
+                        <div class="d-flex">
+                            <div class="flex-shrink-0"><img alt="..."
+                                                            class="rounded-circle"
+                                                            height="35" src="{{ user.profile.avatar.url }}" width="35"/>
+                            </div>
+                            <div class="ms-3">
+                                <div class="fw-bold">{{ user.username }}</div>
+                                When I look at the universe and all the ways the universe wants to kill us, I find it
+                                hard to reconcile that with statements of beneficence.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nested row for non-featured blog posts-->
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- Blog post-->
+                    <div class="card mb-4">
+                        <a href="#!"><img alt="..." class="card-img-top"
+                                          src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"/></a>
+                        <div class="card-body">
+                            <div class="small text-muted">January 1, 2023</div>
+                            <h2 class="card-title h4">Post Title</h2>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
+                                aliquid atque, nulla.</p>
+                            <a class="btn btn-primary" href="#!">Read more →</a>
+                        </div>
+                    </div>
+                    <!-- Blog post-->
+                    <div class="card mb-4">
+                        <a href="#!"><img alt="..." class="card-img-top"
+                                          src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"/></a>
+                        <div class="card-body">
+                            <div class="small text-muted">January 1, 2023</div>
+                            <h2 class="card-title h4">Post Title</h2>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
+                                aliquid atque, nulla.</p>
+                            <a class="btn btn-primary" href="#!">Read more →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <!-- Blog post-->
+                    <div class="card mb-4">
+                        <a href="#!"><img alt="..." class="card-img-top"
+                                          src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"/></a>
+                        <div class="card-body">
+                            <div class="small text-muted">January 1, 2023</div>
+                            <h2 class="card-title h4">Post Title</h2>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
+                                aliquid atque, nulla.</p>
+                            <a class="btn btn-primary" href="#!">Read more →</a>
+                        </div>
+                    </div>
+                    <!-- Blog post-->
+                    <div class="card mb-4">
+                        <a href="#!"><img alt="..." class="card-img-top"
+                                          src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg"/></a>
+                        <div class="card-body">
+                            <div class="small text-muted">January 1, 2023</div>
+                            <h2 class="card-title h4">Post Title</h2>
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis
+                                aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam.</p>
+                            <a class="btn btn-primary" href="#!">Read more →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination-->
+            <nav aria-label="Pagination">
+                <hr class="my-0"/>
+                <ul class="pagination justify-content-center my-4">
+                    <li class="page-item disabled"><a aria-disabled="true" class="page-link" href="#" tabindex="-1">Newer</a>
+                    </li>
+                    <li aria-current="page" class="page-item active"><a class="page-link" href="#!">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4 queue-container">
+            <!-- Search widget-->
+            <div class="card mb-4 queue-header">
+                <div class="card-header">Queue
+                    <button class="btn btn-clear btn-danger" onclick="clearQueue()">Clear Queue</button>
+
+                </div>
+
+                <div class="card-body" id="video-list">
+                    {% for video in queue %}
+                    <div class="video-item">
+                        <span class="video-title">{{ video }}</span>
+                        <button class="btn" onclick="removeVideo('{{ video }}')">Remove</button>
+
+                    </div>
+                    {% empty %}
+                    <p>No videos in queue.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header">Categories</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="{% url 'videos:category_list' %}">{{ video.category }}</a></li>
+
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="{% url 'videos:category_list' %}">{{ video.category }}</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header">Side Widget</div>
+                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use,
+                    and feature the Bootstrap 5 card component!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function toggleDescription(contentId) {
+        var shortDesc = document.getElementById("description-" + contentId);
+        var fullDesc = document.getElementById("full-description-" + contentId);
+        if (shortDesc.style.display === "none") {
+            shortDesc.style.display = "block";
+            fullDesc.style.display = "none";
+        } else {
+            shortDesc.style.display = "none";
+            fullDesc.style.display = "block";
+        }
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        var video = document.getElementById('video-player');
+        var hasViewed = false;
+        var viewThreshold = 30; // 30 seconds to count a view
+        var viewTimer;
+
+        video.onplay = function() {
+            viewTimer = setTimeout(function() {
+                if (!hasViewed) {
+                    sendViewUpdate();
+                }
+            }, viewThreshold * 1000); // 30 seconds
+        };
+
+        video.onpause = function() {
+            clearTimeout(viewTimer); // Cancel the timer if video is paused before 30 seconds
+        };
+
+        function sendViewUpdate() {
+            // Only send the view count request if not already counted
+            if (!hasViewed) {
+                hasViewed = true;
+                $.ajax({
+                    url: "{% url 'videos:video_details' video.id %}",
+                    type: "POST",
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    success: function(response) {
+                        // Update view count display on the page
+                        $('.card-footer small').text('Uploaded {{ video.uploaded_at|timesince }} ago | Views: ' + response.views);
+                    },
+                    error: function() {
+                        alert('Error updating view count');
+                    }
+                });
+            }
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        var video = document.getElementById('video-player');
+        var playButton = $('#play-video');
+
+        // Play the video on button click if it's not already playing
+        playButton.click(function() {
+            video.play();
+            playButton.hide(); // Hide the play button after video starts
+        });
+
+        // Video Play Event
+        video.onplay = function() {
+            console.log('Video is playing');
+        };
+
+        // Check for video file availability
+        video.onerror = function() {
+            alert('Video failed to load. Please check the video URL and format.');
+        };
+
+        // Video Pause Event
+        video.onpause = function() {
+            console.log('Video is paused');
+        };
+
+        // Check if video is loaded and ready to play
+        video.onloadeddata = function() {
+            console.log('Video is ready to play');
+        };
+    });
+</script>
+<script>
+    function toggleContent() {
+        const contentPreview = document.getElementById('contentPreview');
+        const contentFull = document.getElementById('contentFull');
+        const toggleButton = document.getElementById('toggleButton');
+
+        if (contentFull.style.display === "none") {
+            contentFull.style.display = "block";
+            contentPreview.style.display = "none";
+            toggleButton.textContent = "Show Less";
+        } else {
+            contentFull.style.display = "none";
+            contentPreview.style.display = "block";
+            toggleButton.textContent = "Read More";
+        }
+    }
+</script>
+<script>
+    // Functions to handle queue operations with AJAX
+    function removeVideo(videoId) {
+        fetch(`/queue/remove/${videoId}/`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => location.reload());
+    }
+
+    function clearQueue() {
+        fetch(`/queue/clear/`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => location.reload());
+    }
+</script>
+
+
+</body>
+{% endblock content %}

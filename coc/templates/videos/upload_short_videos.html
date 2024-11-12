@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% extends 'base_dashboard.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<html>
+<head>
+    <title>Video Recording</title>
+</head>
+<body>
+<div class="container">
+    <form action="{% url 'videos:upload_short_videos' %}" enctype="multipart/form-data" id="video-upload-form"
+          method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {{ form.title|crispy }}
+        <button type="submit">Upload Video</button>
+    </form>
+
+</div>
+
+    <script>
+        // Define variables and initialize MediaRecorder
+        const videoInput = document.getElementById('video-input');
+        const startRecordingButton = document.getElementById('start-recording-button');
+        const stopRecordingButton = document.getElementById('stop-recording-button');
+        const recordedVideo = document.getElementById('recorded-video');
+        const videoChunks = [];
+        let mediaRecorder;
+        
+        videoInput.addEventListener('change', () => {
+            const stream = videoInput.files[0];
+            mediaRecorder = new MediaRecorder(stream);
+
+            // Limit recording to 1 minute
+            mediaRecorder.ondataavailable = (e) => {
+                videoChunks.push(e.data);
+            };
+
+            // When recording is stopped
+            mediaRecorder.onstop = () => {
+                const videoBlob = new Blob(videoChunks, { type: 'video/mp4' });
+                recordedVideo.src = URL.createObjectURL(videoBlob);
+            };
+        });
+
+        startRecordingButton.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'inactive') {
+                videoChunks.length = 0;
+                mediaRecorder.start();
+            }
+        });
+
+        stopRecordingButton.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}

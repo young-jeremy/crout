@@ -1,0 +1,263 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <!-- Required Meta Tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Document Title, Description, and Author -->
+  <title>Console - Free Bootstrap Admin Template</title>
+  <meta name="description" content="Console is a Free Bootstrap Admin Template.">
+  <meta name="author" content="BootstrapBrain">
+
+  <!-- Favicon and Touch Icons -->
+  <link rel="icon" type="image/png" sizes="512x512" href="{% static  'assets/favicon/favicon-512x512.png' %}">
+
+  <!-- Google Fonts Files -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="{% static 'assets/css/console-bsb.css' %}">
+
+  <!-- BSB Head -->
+</head>
+
+<body>
+
+
+
+  <!-- Main -->
+  <main id="main">
+
+    <!-- Section - Bootstrap Brain Component -->
+    <!-- Breadcrumb -->
+    <section class="py-3 py-md-4 py-xl-5 bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="h4">Cards</h1>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb m-0 fs-7">
+                <li class="breadcrumb-item"><a class="link-primary text-decoration-none" href="{% url 'dashboard:dashboard' %}">Home</a></li>
+                <li class="breadcrumb-item">Components</li>
+                <li class="breadcrumb-item active" aria-current="page">Cards</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section - Bootstrap Brain Component -->
+    <section class="pb-3 pb-md-4 pb-xl-5 bg-light">
+      <div class="container">
+        <div class="row gy-3 gy-md-4">
+          <div class="col-12 col-lg-6">
+            <div class="row gy-3 gy-md-4">
+              <div class="col-12">
+                <div class="card widget-card border-light shadow-sm">
+                  <div class="card-header bg-transparent p-4 border-light-subtle">
+                    <h5 class="card-title widget-card-title m-0">Basic</h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="card">
+                      <img src="{% static 'assets/img/card/card-img-1.jpg' %}" class="card-img-top" alt="Card Image">
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#!" class="btn btn-primary">Go Somewhere</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card widget-card border-light shadow-sm">
+                  <div class="card-header bg-transparent p-4 border-light-subtle">
+                    <h5 class="card-title widget-card-title m-0">Titles, Text, and Links</h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card widget-card border-light shadow-sm">
+                  <div class="card-header bg-transparent p-4 border-light-subtle">
+                    <h5 class="card-title widget-card-title m-0">List Groups</h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="card">
+                      <div class="card-header">
+                        Featured
+                      </div>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card widget-card border-light shadow-sm">
+                  <div class="card-header bg-transparent p-4 border-light-subtle">
+                    <h5 class="card-title widget-card-title m-0">Kitchen Sink</h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="card">
+                      <img src="{% static 'assets/img/card/card-img-1.jpg' %}" class="card-img-top" alt="Card Image">
+                      <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                      </ul>
+                      <div class="card-body">
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <div class="row gy-3 gy-md-4">
+              <div class="col-12">
+                <div class="card widget-card border-light shadow-sm">
+                  <div class="card-header bg-transparent p-4 border-light-subtle">
+                    <h5 class="card-title widget-card-title m-0">Card Styles</h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="card text-bg-primary mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Primary card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-secondary mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Secondary card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-success mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Success card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-danger mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Danger card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-warning mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Warning card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-info mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Info card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-light mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Light card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                    <div class="card text-bg-dark mb-3">
+                      <div class="card-header">Header</div>
+                      <div class="card-body">
+                        <h5 class="card-title">Dark card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="card widget-card border-light shadow-sm">
+                  <div class="card-header bg-transparent p-4 border-light-subtle">
+                    <h5 class="card-title widget-card-title m-0">Header and Footer</h5>
+                  </div>
+                  <div class="card-body p-4">
+                    <div class="card text-center">
+                      <div class="card-header">
+                        Featured
+                      </div>
+                      <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                      </div>
+                      <div class="card-footer text-body-secondary">
+                        2 days ago
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Footer -->
+  <footer class="footer py-3 border-top border-light-subtle">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="py-3">
+            Built by <a href="https://juicehaven.com/" class="link-secondary text-decoration-none">JuiceHaven</a> with <span class="text-accent">&#9829;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Javascript Files: Vendors -->
+  <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Javascript Files: Controllers -->
+  <script src="{% static 'assets/controller/console-bsb.js' %}"></script>
+
+  <!-- BSB Body End -->
+</body>
+
+</html>

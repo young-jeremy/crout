@@ -1,0 +1,51 @@
+{% extends 'base_dashboard.html' %}
+{% load i18n %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
+{% load crispy_forms_tags %}
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+<div>
+            <div class="row justify-content-center ">
+
+                            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                                <div class="card o-hidden border-0 shadow-lg my-5 ">
+
+                                    <div class="card-body p-20">
+
+                                        <div class="row">
+
+                                            <div class="col-lg-6">
+
+
+
+                                                <h2><img src="{% static 'img/crout.webp' %}" height="50" width="100" class="rounded align-items-flex"><span>Login to Christian Outreach Church System</span></h2>
+
+                                                <form method="post" action="{% url 'account_login' %}">
+                                                    {% csrf_token %}
+                                                    {{ form|crispy }}
+                                                    <button type="submit" class="btn btn-google btn-user btn-block">{% trans "Login" %}</button>
+                                                </form>
+                                                <br>
+                                                    <a href="{% provider_login_url 'google' %}" class="btn btn-google btn-user btn-block"><i class="bi bi-google"></i>Login with Google</a>
+
+
+                                                <p>
+                                                    <a href="{% url 'account_signup' %}">{% trans "Don't have an account? Sign up!" %}</a>
+                                                </p>
+
+                                            </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+</div>
+{% endblock %}

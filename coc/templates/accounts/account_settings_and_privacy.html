@@ -1,0 +1,223 @@
+{% extends 'base_dashboard.html' %}
+
+
+{% block content %}
+<div class="container">
+
+    <div class="pill-container">
+        <ul class="vertical-pills">
+            <li><a class="active" href="#profile">Profile</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="#notifications">Notifications</a></li>
+            <li><a href="#security">Security</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#connectedApps">Connected Apps</a></li>
+            <li><a href="#accountPayments">Payments & Billing</a></li>
+            <li><a href="#contentSettings">Content Settings</a></li>
+            <li><a href="#twoFactorAuthentication">2FA</a></li>
+            <li><a href="#privacy">Advanced</a></li>
+        </ul>
+        </ul>
+    </div>
+    <div class="pill-content">
+        <!-- Example content areas -->
+        <div id="profile">
+
+        </div>
+        <div id="settings">Advanced settings on the various content that you see you Crout</div>
+        <div id="notifications">
+            <fieldset>
+                <h6>
+                    Choose which notifications you want to receive from us or you activity on the system and any
+                    newsletters from our magazines and the media team
+
+                </h6>
+                <p>
+                    select the email notifications you might want to receive. it is okay to receive all notifications.
+                    if you feel that you want to choose
+                    which notifications reach you, you have the authority to change this right not
+                </p>
+                <form action="{% url 'notifications:notifications_settings' %}" method="post">
+                    {% csrf_token %}
+                    <fieldset class="row gy-3 gy-md-0">
+                        <legend class="col-form-label col-12 col-md-3 col-xl-2">Email Alerts
+                        </legend>
+                        <div class="col-12 col-md-9 col-xl-10">
+                            <div class="form-check">
+                                <input class="form-check-input" id="email_notifications" type="checkbox">
+                                <label class="form-check-label" for="email_notifications">
+                                    Email Changed
+                                </label>
+                                <p>Notify me when the email has been changed.</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="password_change_notifications" type="checkbox">
+                                <label class="form-check-label" for="password_change_notifications">
+                                    Password Changed
+                                </label>
+                                <p>Send me an email when the password has been changed.</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="weekly_newsletter"
+                                       type="checkbox">
+                                <label class="form-check-label" for="weekly_newsletter">
+                                    Weekly Newsletter
+                                </label>
+                                <p>Send me weekly newsletters on the progress of our content and contemporary
+                                    improvements</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="product_promotions"
+                                       type="checkbox">
+                                <label class="form-check-label" for="product_promotions">
+                                    Product Promotions
+                                </label>
+                                <p>Notify me when there are that better suits my content needs.</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="commentsNotifications" type="checkbox">
+                                <label class="form-check-label" for="commentsNotifications">
+                                    Comments
+                                </label>
+                                <p>Send me emails about comments posted on my content.</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="subscriptions" type="checkbox">
+                                <label class="form-check-label" for="subscriptions">
+                                    Subscriptions
+                                </label>
+                                <p>Notify me when the channels i have subscribed to have posted content on their
+                                    channels</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="activityNotifications"
+                                       type="checkbox">
+                                <label class="form-check-label" for="weekly_newsletter">
+                                    Activity Notifications
+                                </label>
+                                <p>Send me emails about activity notifications such as likes</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="sharedContent"
+                                       type="checkbox">
+                                <label class="form-check-label" for="sharedContent">
+                                    Shared Content
+                                </label>
+                                <p>Notify me when someone shares my content on their websites</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="recommendations" type="checkbox">
+                                <label class="form-check-label" for="recommendations">
+                                    Recommendations
+                                </label>
+                                <p>Send me recommendations of what is new based on my last activity and preferences.</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="mentions"
+                                       type="checkbox">
+                                <label class="form-check-label" for="mentions">
+                                    Mentions
+                                </label>
+                                <p>Send emails when someone mentions me on their spaces</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="promotionContent"
+                                       type="checkbox">
+                                <label class="form-check-label" for="promotionContent">
+                                    Promotion Content
+                                </label>
+                                <p>Send me emails when there are one time offers such as for premium memberships</p>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" id="educationalContent"
+                                       type="checkbox">
+                                <label class="form-check-label" for="educationalContent">
+                                    Educational Content
+                                </label>
+                                <p>Send me emails on how i can improve content through educational content</p>
+                            </div>
+
+
+                        </div>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-primary mt-4" type="submit">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <h6>
+                    Here are General settings on various notifications
+                </h6>
+                <p>All emails will be sent to {{ user.email }} unless you want to <a href="{% url 'account_email' %}">change
+                    your primary email</a></p>
+
+            </fieldset>
+        </div>
+        <div id="security">We value your</div>
+
+
+        <div id="privacy">Set private information</div>
+
+
+        <div id="connectedApps">
+            <fieldset>
+                <p>
+                    Choose which application will be connected with Crout and the associations
+                </p>
+                <hr>
+                <h6 class="text-center">Why you should connect third party applications</h6>
+                <p>
+                    Connected apps are third party accounts that we collaborate with such as google which gives
+                    you a simple way to sign in instead of having to sign up from scratch.
+                </p>
+                <hr>
+                <p>
+                    if you want to add <a href="{% url 'socialaccount_connections' %}">Google</a> as your way of signing
+                    in or
+                    signup, click and set
+                </p>
+            </fieldset>
+        </div>
+
+
+        <div id="accountPayments">
+            <fieldset>
+                <h6>
+                    Set your credit card numbers or terminate payments whenever you want
+                </h6>
+                <hr>
+                <p>You can customize whether you want to make purchases automatically from the credit card and terminate
+                    when you want to or make the purchase when you want to
+                </p>
+                <a href="{% url 'payments:payment_view' %}">Set Automatic Payments</a>
+            </fieldset>
+        </div>
+
+
+        <div id="contentSettings">Choose which content is to be shown when you open Crout application</div>
+
+
+        <div id="twoFactorAuthentication">
+            <section>
+                <h6>
+                    Two-Factor Authentication
+                </h6>
+                <p>Two-Factor Authentication (2FA) protects your account from frauds who are trying to access your
+                    account
+                    in order to manipulate or steal content. Be aware that this is a critical point since your account
+                    might be terminated the moment
+                    we realize that your content is not consistent with the System guidelines.
+
+                </p>
+                <hr>
+                <p>
+                    if you want to enable this setting, click on the button below to goggle on this setting
+                </p>
+                <p><a href="{% url 'mfa_index' %}">2FA</a></p>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock content %}

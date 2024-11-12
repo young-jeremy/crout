@@ -1,0 +1,11 @@
+{% block content %}
+<h1>Categories</h1>
+
+<ul>
+    {% for category in categories %}
+        <li><a href="{% url 'content_by_category' category.id %}">{{ category.name }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_category' %}">Create Category</a>
+
+{% endblock content %}
