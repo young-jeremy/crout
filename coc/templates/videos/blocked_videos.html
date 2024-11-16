@@ -1,22 +1,27 @@
 {% extends 'base_dashboard.html' %}
 
-    <title>Blocked Videos</title>
+<title>Blocked Videos</title>
 
-    {% block content %}
+{% block content %}
+<div class="container">
+    <div>
         <ul>
+
             {% for video in moderated_videos %}
-                    <li>
-                        <a href="{% url 'videos:blocked_video_details' video.id %}">
-                            <div>
-                                {{ video.title }}
-                                {{ video.description }}
-                                {{ video.status }}
-                            </div>
-                        </a>
-                    </li>
+            <li class="list">
+                <a href="{% url 'videos:blocked_video_details' video.id %}">
+                    <div>
+                        {{ video.title }}
+                        {{ video.description }}
+                        {{ video.status }}
+                    </div>
+                </a>
+            </li>
             {% empty %}
-                <p>There are no blocked videos currently</p>
+            <p>There are no blocked videos currently</p>
             {% endfor %}
         </ul>
-    {% endblock content %}
+    </div>
+</div>
+{% endblock content %}
 

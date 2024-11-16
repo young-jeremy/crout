@@ -313,7 +313,7 @@ MPESA_CONSUMER_SECRET = "oXeNhIHMtAmoNMWDSGnTEFPOGCnnF6plVtAmfdGHCRyPjmaELymikwm
 MPESA_EXPRESS_SHORTCODE = "174379"  # Default test shortcode
 MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"  # Ensure you replace this with your actual passkey
 MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"  # Use live URL for production
-CALLBACK_URL = "https://http://127.0.0.1:8000/payments/callback/"
+CALLBACK_URL = "https://yourdomain.com/payments/callback"
 INITIATOR_PASSWORD = 'MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjQxMTEyMjAwMzQ4'
 
 
@@ -341,3 +341,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 
 SESSION_COOKIE_AGE = 3600  # Session expires after 1 hour (3600 seconds)
+
+
+NGROK_AUTHTOKEN="2oqgfIqHNHZSrK7YqqmbWedPCTu_5LVRdgAp2gr3q9x6jVG57 python example.py"
