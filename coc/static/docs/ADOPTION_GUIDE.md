@@ -33,9 +33,9 @@ desk.
   those tokens, and will also need be able to set/send those tokens back to the service desk.
 - Examples:
     *
-    Genesys: [postWebchatGuestConversations(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript-guest/WebChatApi.html#createwebchatconversationresponse_postwebchatguestconversations_body_), [ApiClient.instance.setJwt(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/#authentication)
+  Genesys: [postWebchatGuestConversations(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript-guest/WebChatApi.html#createwebchatconversationresponse_postwebchatguestconversations_body_), [ApiClient.instance.setJwt(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript/#authentication)
     *
-    Twilio: [create(...)](https://www.twilio.com/docs/flex/developer/messaging/api/chat-channel?code-sample=code-create-channel&code-language=Java&code-sdk-version=8.x), [getChannelByUniqueName(...)](../src/flex/webChat/client/src/twilioFlex.ts#L64), [ChatGrant(...)](../src/flex/webChat/server/src/routes/auth.ts#L60), [AccessToken(...)](../src/flex/webChat/server/src/routes/auth.ts#L67)
+  Twilio: [create(...)](https://www.twilio.com/docs/flex/developer/messaging/api/chat-channel?code-sample=code-create-channel&code-language=Java&code-sdk-version=8.x), [getChannelByUniqueName(...)](../src/flex/webChat/client/src/twilioFlex.ts#L64), [ChatGrant(...)](../src/flex/webChat/server/src/routes/auth.ts#L60), [AccessToken(...)](../src/flex/webChat/server/src/routes/auth.ts#L67)
 
 ### endChat
 
@@ -44,7 +44,7 @@ Called when the user clicks "End live chat" in the widget to end the conversatio
 - Need: Endpoint that will stop a conversation with an agent.
 - Examples:
     *
-    Genesys: [deleteWebchatGuestConversationMember(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript-guest/WebChatApi.html#deleteWebchatGuestConversationMember)
+  Genesys: [deleteWebchatGuestConversationMember(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript-guest/WebChatApi.html#deleteWebchatGuestConversationMember)
     * Twilio: [leave(...)](../src/flex/webChat/client/src/twilioFlex.ts#L176)
 
 ### sendMessageToAgent
@@ -54,7 +54,7 @@ Used to relay user messages from WA chat to service desk, within a chat session 
 - Need: Endpoint for sending a message to the service desk conversation that was opened through startChat.
 - Examples:
     *
-    Genesys: [postWebchatGuestConversationMemberMessages(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript-guest/WebChatApi.html#webchatmessage_postwebchatguestconversationmembermessages_conversationid__memberid__body_)
+  Genesys: [postWebchatGuestConversationMemberMessages(...)](https://developer.mypurecloud.com/api/rest/client-libraries/javascript-guest/WebChatApi.html#webchatmessage_postwebchatguestconversationmembermessages_conversationid__memberid__body_)
     * Twilio: [sendMessage(...)](../src/flex/webChat/client/src/twilioFlex.ts#L195)
 
 ### updateState (optional)

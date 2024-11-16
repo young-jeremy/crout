@@ -76,12 +76,12 @@ uses the Genesys [REST API](https://developer.mypurecloud.com.au/api/rest/v2/).
 
     1. From the `src/genesys/webChat/server` directory, run `npm install`.
 
-    1. From the `src/genesys/webChat/server` directory, run `npm start`. This starts a server on port 3000 on your local
-       machine.
+   1. From the `src/genesys/webChat/server` directory, run `npm start`. This starts a server on port 3000 on your local
+      machine.
 
-    1. Your end users must be able to access the server from their browsers. If you do not have your own hosted
-       environment, and you wish to expose your local development for testing, consider using a service such
-       as [ngrok](https://ngrok.com/) to create a public URL:
+   1. Your end users must be able to access the server from their browsers. If you do not have your own hosted
+      environment, and you wish to expose your local development for testing, consider using a service such
+      as [ngrok](https://ngrok.com/) to create a public URL:
 
         ```
         ngrok http http://localhost:3000

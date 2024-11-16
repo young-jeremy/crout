@@ -63,17 +63,17 @@ at [Patron APIs](https://developer.niceincontact.com/API/PatronAPI).
         - Go back to `ACD Skills` and click on your newly created skill. **Take note of the `Skill ID`**.
 
     1.
-    Create [Script](https://help.incontact.com/spring20/en/Content/Studio/Scripts/ScriptTypesOverview.htm?tocpath=Contact%20Center%20Tools%7CStudio%7CScripts%7C_____0):
-    a script is a network of actions that route and manage customer traffic for a contact center.
-        - Using a Windows
-          machine, [download Studio](https://help.incontact.com/spring20/en/Content/Studio/Application/DownloadAndInstallStudio.htm?tocpath=Contact%20Center%20Tools%7CStudio%7C_____1)
+   Create [Script](https://help.incontact.com/spring20/en/Content/Studio/Scripts/ScriptTypesOverview.htm?tocpath=Contact%20Center%20Tools%7CStudio%7CScripts%7C_____0):
+   a script is a network of actions that route and manage customer traffic for a contact center.
+   - Using a Windows
+   machine, [download Studio](https://help.incontact.com/spring20/en/Content/Studio/Application/DownloadAndInstallStudio.htm?tocpath=Contact%20Center%20Tools%7CStudio%7C_____1)
         - [Create and save a simple chat script](https://help.nice-incontact.com/content/acd/chat/setupchat.htm?tocpath=ACD%7CACD%7CChat%7C_____1).
         - Alternatively, you can also import an existing script.
 
     1.
-    Create [Point of Contact](https://help.incontact.com/spring20/en/Content/ACD/PointsOfContact/PointsOfContactOverview.htm?tocpath=System%20Administration%7CSkills%20and%20Campaigns%7CPoints%20Of%20Contact%7C_____0):
-    A point of contact (POC) is an entry point that an inbound contact uses to initiate an interaction. For a Chat
-    interaction, this is a GUID that identifies the chat channel.
+   Create [Point of Contact](https://help.incontact.com/spring20/en/Content/ACD/PointsOfContact/PointsOfContactOverview.htm?tocpath=System%20Administration%7CSkills%20and%20Campaigns%7CPoints%20Of%20Contact%7C_____0):
+   A point of contact (POC) is an entry point that an inbound contact uses to initiate an interaction. For a Chat
+   interaction, this is a GUID that identifies the chat channel.
         - Navigate to ACD > Contact Settings > Points of Contact > Create New > Single Point of Contact
         - `Media Type`: Chat
         - `Name`: Give it a name

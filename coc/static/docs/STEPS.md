@@ -63,8 +63,8 @@ Keep the following things in mind as you work through these steps:
 
     - For an end user ending the chat, implement `endChat()`.
 
-    - For a human agent ending the chat, implement `this.callback.agentEndedChat()`. The appropriate place to call this
-      function depends on the particular service desk platform being used.
+   - For a human agent ending the chat, implement `this.callback.agentEndedChat()`. The appropriate place to call this
+     function depends on the particular service desk platform being used.
 
 1. Implement the logic supporting agent transfer in the following functions:
 
