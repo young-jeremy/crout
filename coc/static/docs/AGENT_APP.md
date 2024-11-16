@@ -1,16 +1,25 @@
 # Web chat agent app history widget
 
-The embedded agent application allows your live agents to view a chat history of the end user's conversation with Watson Assistant to better understand their needs.
+The embedded agent application allows your live agents to view a chat history of the end user's conversation with Watson
+Assistant to better understand their needs.
 
 ## How it works
 
-Starting with web chat 4.5.0, as part of the [startChat](API.md#startChat) method, a second parameter is passed to the startChat method. This `startChatOptions` parameter is an object with options and metadata about the chat. See [the StartChatOptions type](../src/common/types/serviceDesk.ts) for more information.
+Starting with web chat 4.5.0, as part of the [startChat](API.md#startChat) method, a second parameter is passed to the
+startChat method. This `startChatOptions` parameter is an object with options and metadata about the chat.
+See [the StartChatOptions type](../src/common/types/serviceDesk.ts) for more information.
 
-Located at `startChatOptions.agentAppInfo.sessionHistoryKey` is a string that contains everything web chat needs to securely open a read-only mode of the web chat showing a transcript of the conversation between the end user and Watson Assistant. The vast majority of service desks have a way to pass meta information to the agent's view and either embed an iFrame or embed HTML and JavaScript. It is up to you to determine how to pass the `sessionHistoryKey` to either the IBM provided iFrame or JavaScript.
+Located at `startChatOptions.agentAppInfo.sessionHistoryKey` is a string that contains everything web chat needs to
+securely open a read-only mode of the web chat showing a transcript of the conversation between the end user and Watson
+Assistant. The vast majority of service desks have a way to pass meta information to the agent's view and either embed
+an iFrame or embed HTML and JavaScript. It is up to you to determine how to pass the `sessionHistoryKey` to either the
+IBM provided iFrame or JavaScript.
 
 ## Viewing agent application via iFrame
 
-Some service desks allow you to add an iFrame to the agent page via a server side template language. If that mechanism also allows you to access the `sessionHistoryKey`, you can simply embed an iFrame that will render the history of the conversation:
+Some service desks allow you to add an iFrame to the agent page via a server side template language. If that mechanism
+also allows you to access the `sessionHistoryKey`, you can simply embed an iFrame that will render the history of the
+conversation:
 
 ```
 <iframe
@@ -33,4 +42,6 @@ Alternatively, you can load in a JavaScript file that you can feed the `sessionH
 </script>
 ```
 
-The `loadAgentApp` method takes two arguments. The first argument is the `sessionHistoryKey` value. The second is a DOM element for the read-only web chat to render to. The web chat will grow to the size of the element and the element should be given a height and width for the web chat to grow to.
+The `loadAgentApp` method takes two arguments. The first argument is the `sessionHistoryKey` value. The second is a DOM
+element for the read-only web chat to render to. The web chat will grow to the size of the element and the element
+should be given a height and width for the web chat to grow to.
