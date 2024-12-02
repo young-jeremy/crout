@@ -1,11 +1,34 @@
+{% extends 'base_dashboard.html' %}
 
+<head>
+    <meta charset="UTF-8">
+    <title>My Uploaded Videos</title>
+</head>
 {% block content %}
-<h2>Your Videos</h2>
-<ul>
-    {% for video in videos %}
-    <li>
-        <a href="{% url 'videos:videos_list' %}">{{ video.title }}</a>
-    </li>
-    {% endfor %}
-</ul>
-{% endblock %}
+<body>
+<div class="container">
+    <h1 class="primary">My Uploaded Videos</h1>
+
+    {% if uploaded_videos %}
+        <ul>
+            {% for video in uploaded_videos %}
+                <li>
+                    <div>
+                        <h2>{{ video.title }}</h2>
+                        <p>{{ video.description }}</p>
+                        <p>Uploaded on: {{ video.uploaded_at }}</p>
+                        <video width="320" height="240" controls>
+                            <source src="{{ video.video_file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have not uploaded any videos yet.</p>
+    {% endif %}
+</div>
+</body>
+{% endblock content %}
+

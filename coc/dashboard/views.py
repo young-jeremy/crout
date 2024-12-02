@@ -1,6 +1,21 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
 from videos.models import Category
+
+from .forms import ContactForm
+
+from django.conf import settings
+
+
+from django.shortcuts import render
+
+from notifications.models import Notifications
+
+
+def success_view(request):
+    return render(request, 'dashboard/contact_success.html')
+
 
 
 def accordion(request):
@@ -120,8 +135,34 @@ def pages_pricing(request):
 
 
 def pages_contact(request):
-    template_name='dashboard/pages-contact.html'
-    return render(request, template_name)
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Get form data
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+
+            # Send email
+            send_mail(
+                f"New contact form submission from {name}",
+                message,
+                email,
+                [settings.EMAIL_HOST_USER],  # Email to send to (your email)
+                fail_silently=False,
+            )
+            Notifications.objects.create(
+                user=request.user,  # Assign to a specific user if applicable
+                message=f"New contact form submission from {name}: {message}"
+            )
+
+            # Redirect to a success page (you can create this)
+            return redirect('dashboard:contact_success')
+    else:
+        form = ContactForm()
+
+    return render(request, 'dashboard/pages-contact.html', {'form': form})
+
 
 
 def pages_faqs(request):

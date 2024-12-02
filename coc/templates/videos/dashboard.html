@@ -1,17 +1,10 @@
 {% extends 'base_dashboard.html' %}
 
-{% block title %} | Account Login {% endblock %}
 
 {% block content %}
-{#<h1>Video Uploader</h1>#}
-{#<form enctype="multipart/form-data" method="POST" action="">#}
-{#{% csrf_token %}#}
-{#{{ form.as_p }}#}
-{#<input type="submit" value="Upload"/>#}
-{#</form>#}
 
 <br><br>
-<h2>This is the admin template</h2>
+<h2>Your Videos</h2>
     <div class="col-12">
         <div class="row">
             {% for video in videos %}

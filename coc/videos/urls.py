@@ -5,7 +5,7 @@ from . import views
 app_name = 'videos'
 
 urlpatterns = [
-    path('admin_dashboard', views.admin_dashboard, name='your_videos'),
+    path('admin_dashboard', views.user_uploaded_videos, name='your_videos'),
     path('record_short_videos/', views.record_short_videos, name='record_short_videos'),
     path('upload_short_videos/', views.upload_short_videos, name='upload_short_videos'),
     path('short_video_list/', views.short_video_list, name='short_video_list'),
@@ -23,6 +23,8 @@ urlpatterns = [
     path('favorite_videos/', views.favorite_videos, name='favorite_videos'),
 #    path('watched_videos/', views.watched_videos, name='watched_videos'),
     path('trending/', views.trending, name='trending'),
+    path('voice_search/', views.voice_search, name='voice_search'),
+
     path('watch_later/', views.watch_later, name='watch_later'),
     path('add_to_watch_later/<int:video_id>/', views.add_watch_later, name='add_to_watch_later'),
     path('remove_from_watch_later/<int:watch_later_id>/', views.remove_watch_later, name='remove_from_watch_later'),
@@ -84,6 +86,7 @@ urlpatterns = [
     path('gospel_made_for_kids/', views.gospel_made_for_kids, name='gospel_made_for_kids'),
     path('praise_and_worship/', views.praise_and_worship, name='praise_and_worship'),
     path('music/', views.music, name='music_videos'),
+
     path('testimonies/', views.testimonies, name='testimonies'),
     path('evangelism/', views.evangelism, name='evangelism'),
     path('bible_lesson_discussions /', views.bible_discussions, name='bible_discussions'),
@@ -97,6 +100,10 @@ urlpatterns = [
     path('queue/remove/<str:video_id>/', views.remove_video_from_queue, name='remove_video_from_queue'),
     path('queue/clear/', views.clear_video_queue, name='clear_video_queue'),
     path('queue/display/', views.display_video_queue, name='display_video_queue'),
-
+    path('search_video/',views.search_video,name='search_video'),
+    path('search/',views.search,name='search'),
+    path('search_for_videos/',views.search_for_videos,name='search_for_videos'),
+    path('video/download/<int:video_id>/', views.download_video, name='download_video'),
+    path('downloaded-videos/', views.downloaded_videos, name='downloaded_videos'),
 
 ]

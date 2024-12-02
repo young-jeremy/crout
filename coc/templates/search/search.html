@@ -1,0 +1,31 @@
+{% extends 'base_dashboard.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+    <h2>Search Results</h2>
+
+
+    <form action="{% url 'videos:search' %}" class="row g-1 px-3 py-2 align-items-center"
+          method="get">
+        {% csrf_token %}
+        <div class="col-8">
+        </div>
+        <div class="col-8">
+            <input class="form-control" name="q" placeholder="Search..." type="text" value="{{ query }}">
+        </div>
+        <div class="col-4">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+        {% if results %}
+        <ul>
+            {% for result in results %}
+            <li>{{ result.object.title }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No results found.</p>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

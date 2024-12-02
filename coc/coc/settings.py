@@ -19,7 +19,6 @@ from google.oauth2 import service_account
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -30,7 +29,6 @@ SECRET_KEY = 'django-insecure-pxrh=7@@zb#5-6+v88o$x5)p7=64719^p!*5i@limgjt-$su(6
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -52,7 +50,7 @@ INSTALLED_APPS = [
     'comments',
     'blog',
 
-    #D
+    # D
     'django_daraja',
 
     # H
@@ -66,9 +64,10 @@ INSTALLED_APPS = [
 
     # O
 
-    #P
+    # P
 
     'payments',
+    'services',
     'channels',
     'videos',
     'django.contrib.sites',
@@ -112,8 +111,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'coc.wsgi.application'
 
-
-
 SITE_ID = 1  # Required by django-allauth
 
 # Database
@@ -126,8 +123,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL='accounts.User'
-
+AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -147,7 +143,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -158,7 +153,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -173,15 +167,11 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
 AUTHENTICATION_BACKENDS = [
-    #'social_core.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',  # Allauth
 ]
-
-
 
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'videos:category_list'
@@ -190,8 +180,7 @@ LOGOUT_REDIRECT_URL = 'account_login'
 SOCIAL_AUTH_FACEBOOK_KEY = "#############"
 SOCIAL_AUTH_FACEBOOK_SECRET = "############"
 
-
-#for extra info
+# for extra info
 SOCIAL_AUTH_FACEBOOK_SCOPE = [
     'email',
 ]
@@ -200,19 +189,17 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Require email verification
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True  # Redirect after login
 ACCOUNT_USERNAME_REQUIRED = False  # Allow users to log in with email only
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-SOCIALACCOUNT_EMAIL_AUTHENTICATION='True'
-SOCIALACCOUNT_AUTO_SIGNUP='True'
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = 'True'
+SOCIALACCOUNT_AUTO_SIGNUP = 'True'
 SOCIALACCOUNT_QUERY_EMAIL = True  # Get email address from Google
 SOCIALACCOUNT_ADAPTER = 'accounts.adapters.MySocialAccountAdapter'
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jeremymayaka96@gmail.com'
-EMAIL_HOST_PASSWORD = 'brvn zwbn lrfa lsig'  # Use an app password if 2FA is enabled
-
+EMAIL_HOST_PASSWORD = 'ocpuiqeuraxijdhj'  # Use an app password if 2FA is enabled
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -247,10 +234,7 @@ TWILIO_ACCOUNT_SID = 'your_account_sid'
 TWILIO_AUTH_TOKEN = 'your_auth_token'
 TWILIO_PHONE_NUMBER = 'your_twilio_phone_number'
 
-
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
-
-
 
 MFA_FORMS = {
     'authenticate': 'allauth.mfa.base.forms.AuthenticateForm',
@@ -259,7 +243,6 @@ MFA_FORMS = {
     'deactivate_totp': 'allauth.mfa.totp.forms.DeactivateTOTPForm',
     'generate_recovery_codes': 'allauth.mfa.recovery_codes.forms.GenerateRecoveryCodesForm',
 }
-
 
 from django.contrib.messages import constants as message_constants
 
@@ -271,7 +254,6 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'danger',
 }
 
-
 import logging
 
 logging.basicConfig(
@@ -280,30 +262,35 @@ logging.basicConfig(
     format='%(asctime)s %(levelname)s %(message)s',
 )
 
-
+import os
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),  # Directory to store Whoosh index files
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     },
 }
 
+HAYSTACK_DOCUMENT_FIELD = 'text'
+
+
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+TEMPLATES[0]['OPTIONS']['debug'] = True
 
 FIRE_BASE_KEY = {
-  "type": "service_account",
-  "project_id": "christian-outreach-churc-6eed3",
-  "private_key_id": "70fe94d44aea44d399a2fd8c3551043fadc73279",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyuisAd818ou2x\nffbnITwl/7QzF6fZmQuOALyp1JPBfjZ1QnlSAfLGQEfNGW21nj0s0Y7QdznP/WWa\n7s0OSXvhrkpajS6SGTfFMhbTZxhrNOGo8HooJ0CV8Pr6q18BmfbgjQZKZjovMB7X\ngNzEFPpn3FoPblrGxhfDAtJ4CSBUQXD2UzwVEg+RQpst3Mh71BspEKm6Tck77gQl\nMdS9/C4LA6u8wsc1gahoSxwy+YjhD1XRmCkMjsWpYXbZfnby+v5PmLyKFQWE00ok\nOpMNJLRNZF5WQvn+tw2mXhvq7cPHrEJB+u79o6LdCJmwexSJXGysCYdjHvpYGERA\npmmw0aslAgMBAAECggEALg3h2c+FMEotlLCASGOcg7Alx4qfcmdI/nD7LIn9/vye\nXM3hxDuDSwmyVsvoJMYfPmbLdbVbPNivb2J8jWNrHCbUuwupRfVglRxInHXy6WEp\niuZYm/MtZdXAXop9Q0TgxFEin1ZDRPiR4fcvLAm50ryJqnNFyfWuls4p3MuBPKRn\nL2M8gyJIODF30iT5w3jmH19XAexQzgrFX9R9sRO7O88bvmET+/VfYwUpQP22puT/\nJhbhiQJWWPfvMrLQKcIZ8TZhZ3JNyhc9keIECl4H6UaOiPGaAoXxZRQsPh/0/ndw\nv2O9SUVrPUPZSTAjT8gYMlZjYKtuMGqW1d0W5x9kCwKBgQDyx2YYr/xP7ZJ1Iyq2\n5Sg/Hf0pXy1mY5OhDDMhE93mXQenzB4dFgV11dYi1+R1XdAA0riNeSISMdHZsyNJ\nz7VfMjuK8GKd4Atf8czStIhL7Y3kIzBfxhJ0cOTD9d+VXJCIz8tvzPzPIp0x34Sg\nroWXzG+cftlOUNLUCax9zesCJwKBgQC8ddG5dvnR8ccNyRMiUzXvZbp5PBkyfVgR\nqzT2sIwDJvEN9dxUuyJAzPKfv2+z9oXYFy5CUBzE4VhD683GIV2P90l2XWfk491/\nv2RsDES5F5b+ZRDA83MknK0pBSDubszwaHf+Jc9NQ4pMkTB5Y58dTBn8fZZIaZTm\nE+oPmRoT0wKBgQCQ6D1jLN+PoYCSVBwxsFO2YKLzp7CEdZjvPkXiT2ZaElr4Z5ft\nynAV5j167JubBhSZ+SxYnN2eOIhFxWuhqc1a9bOeeV6TVt/TM5MKjODxWOghLHO6\nJpJrV9rjsAT0tJw8XLLTl2mqBMIIu54A/koU0dwob3orCYjdMKz5JghIbwKBgE3X\n5J7U0++yDGRXT7333OlbfaCiAE5ok74Il8Hlvo92wE7h5PZirY1Smkz9x+fvxe0x\n9fuSF7AC3HCBr+dM1NaocAGiJ03WCSHBLnuqvaAubEH8AOWSKVdQF/4/jhCuV5xd\nqmKhv3TMlw11Uy5wxcJWMs2mGjMi2UwHocB7ntfdAoGAPwWxLTNJeqOKLHdWZ8Ce\n/yRJsOro8ScRyUnUhkE05jGWOZ1j+OJI0Sgvwb+8OUKMXpmE8OmrbPetDjzm5xqB\n+o5sgdFnl8zCOU8zV8/4v8HziCzx6qMhMxia+iul8lfUVMhQpKn3W0qsW3bEPITC\nhMQt2R7pq6hb0DhRwGDhYSw=\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-y0pkc@christian-outreach-churc-6eed3.iam.gserviceaccount.com",
-  "client_id": "114715230490591437850",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-y0pkc%40christian-outreach-churc-6eed3.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
+    "type": "service_account",
+    "project_id": "christian-outreach-churc-6eed3",
+    "private_key_id": "70fe94d44aea44d399a2fd8c3551043fadc73279",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCyuisAd818ou2x\nffbnITwl/7QzF6fZmQuOALyp1JPBfjZ1QnlSAfLGQEfNGW21nj0s0Y7QdznP/WWa\n7s0OSXvhrkpajS6SGTfFMhbTZxhrNOGo8HooJ0CV8Pr6q18BmfbgjQZKZjovMB7X\ngNzEFPpn3FoPblrGxhfDAtJ4CSBUQXD2UzwVEg+RQpst3Mh71BspEKm6Tck77gQl\nMdS9/C4LA6u8wsc1gahoSxwy+YjhD1XRmCkMjsWpYXbZfnby+v5PmLyKFQWE00ok\nOpMNJLRNZF5WQvn+tw2mXhvq7cPHrEJB+u79o6LdCJmwexSJXGysCYdjHvpYGERA\npmmw0aslAgMBAAECggEALg3h2c+FMEotlLCASGOcg7Alx4qfcmdI/nD7LIn9/vye\nXM3hxDuDSwmyVsvoJMYfPmbLdbVbPNivb2J8jWNrHCbUuwupRfVglRxInHXy6WEp\niuZYm/MtZdXAXop9Q0TgxFEin1ZDRPiR4fcvLAm50ryJqnNFyfWuls4p3MuBPKRn\nL2M8gyJIODF30iT5w3jmH19XAexQzgrFX9R9sRO7O88bvmET+/VfYwUpQP22puT/\nJhbhiQJWWPfvMrLQKcIZ8TZhZ3JNyhc9keIECl4H6UaOiPGaAoXxZRQsPh/0/ndw\nv2O9SUVrPUPZSTAjT8gYMlZjYKtuMGqW1d0W5x9kCwKBgQDyx2YYr/xP7ZJ1Iyq2\n5Sg/Hf0pXy1mY5OhDDMhE93mXQenzB4dFgV11dYi1+R1XdAA0riNeSISMdHZsyNJ\nz7VfMjuK8GKd4Atf8czStIhL7Y3kIzBfxhJ0cOTD9d+VXJCIz8tvzPzPIp0x34Sg\nroWXzG+cftlOUNLUCax9zesCJwKBgQC8ddG5dvnR8ccNyRMiUzXvZbp5PBkyfVgR\nqzT2sIwDJvEN9dxUuyJAzPKfv2+z9oXYFy5CUBzE4VhD683GIV2P90l2XWfk491/\nv2RsDES5F5b+ZRDA83MknK0pBSDubszwaHf+Jc9NQ4pMkTB5Y58dTBn8fZZIaZTm\nE+oPmRoT0wKBgQCQ6D1jLN+PoYCSVBwxsFO2YKLzp7CEdZjvPkXiT2ZaElr4Z5ft\nynAV5j167JubBhSZ+SxYnN2eOIhFxWuhqc1a9bOeeV6TVt/TM5MKjODxWOghLHO6\nJpJrV9rjsAT0tJw8XLLTl2mqBMIIu54A/koU0dwob3orCYjdMKz5JghIbwKBgE3X\n5J7U0++yDGRXT7333OlbfaCiAE5ok74Il8Hlvo92wE7h5PZirY1Smkz9x+fvxe0x\n9fuSF7AC3HCBr+dM1NaocAGiJ03WCSHBLnuqvaAubEH8AOWSKVdQF/4/jhCuV5xd\nqmKhv3TMlw11Uy5wxcJWMs2mGjMi2UwHocB7ntfdAoGAPwWxLTNJeqOKLHdWZ8Ce\n/yRJsOro8ScRyUnUhkE05jGWOZ1j+OJI0Sgvwb+8OUKMXpmE8OmrbPetDjzm5xqB\n+o5sgdFnl8zCOU8zV8/4v8HziCzx6qMhMxia+iul8lfUVMhQpKn3W0qsW3bEPITC\nhMQt2R7pq6hb0DhRwGDhYSw=\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-y0pkc@christian-outreach-churc-6eed3.iam.gserviceaccount.com",
+    "client_id": "114715230490591437850",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-y0pkc%40christian-outreach-churc-6eed3.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
 }
-
-
 
 # Initialize environment variables
 # settings.py
@@ -315,7 +302,6 @@ MPESA_PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c91
 MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"  # Use live URL for production
 CALLBACK_URL = "https://yourdomain.com/payments/callback"
 INITIATOR_PASSWORD = 'MTc0Mzc5YmZiMjc5ZjlhYTliZGJjZjE1OGU5N2RkNzFhNDY3Y2QyZTBjODkzMDU5YjEwZjc4ZTZiNzJhZGExZWQyYzkxOTIwMjQxMTEyMjAwMzQ4'
-
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -342,5 +328,4 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 
 SESSION_COOKIE_AGE = 3600  # Session expires after 1 hour (3600 seconds)
 
-
-NGROK_AUTHTOKEN="2oqgfIqHNHZSrK7YqqmbWedPCTu_5LVRdgAp2gr3q9x6jVG57 python example.py"
+NGROK_AUTHTOKEN = "2oqgfIqHNHZSrK7YqqmbWedPCTu_5LVRdgAp2gr3q9x6jVG57 python example.py"

@@ -1,0 +1,9 @@
+# services/templatetags/custom_filters.py
+from django import template
+
+register = template.Library()
+
+@register.filter(name='get_item')
+def get_item(dictionary, key):
+    """Custom filter to get a value from a dictionary by key."""
+    return dictionary.get(key)

@@ -1,0 +1,25 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<div class="container">
+<h2>Your Subscriptions</h2>
+{% if channels %}
+    <ul>
+        {% for channel in channels %}
+            <li>
+                <a href="{% url 'videos:channel_details' channel.id %}">{{ channel.name }}</a>
+
+                <!-- Check if the current channel's ID is in the subscribed_channel_ids list -->
+                {% if channel.id in subscribed_channel_ids %}
+                    <a href="{% url 'services:unsubscribe' channel.id %}">Unsubscribe</a>
+                {% else %}
+                    <a href="{% url 'services:subscribe' channel.id %}">Subscribe</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You are not subscribed to any channels yet.</p>
+{% endif %}
+</div>
+{% endblock %}

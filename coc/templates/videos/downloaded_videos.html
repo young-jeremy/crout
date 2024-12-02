@@ -1,0 +1,27 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<div class="container">
+    <meta charset="UTF-8">
+    <title>Downloaded Videos</title>
+
+    <h1>Your Downloaded Videos</h1>
+
+    <!-- Form to select and upload a local video -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="video_file">Select a downloaded video:</label>
+        <input type="file" name="video_file" id="video_file" accept="video/mp4, video/x-m4v, video/*">
+        <button type="submit">Play Video</button>
+    </form>
+
+    <!-- If a video file is uploaded, display the player -->
+    {% if selected_video %}
+        <h2>Now Playing: {{ selected_video.name }}</h2>
+        <video controls>
+            <source src="{{ selected_video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -40,8 +40,8 @@
              role="tabpanel">
             <div class="row">
                 {% for content in category.contents.all %}
-                <div class="col-md-4">
-                    <div class="card mb-3">
+                <div class="col-md-4" style="border-bottom: none;">
+                    <div class="card mb-3" style="border-bottom: none;">
                         <a href="{% url 'videos:video_details' content.id %}">
                             <img alt="{{ content.title }}" class="card-img-top" src="{{ content.thumbnail.url }}" height="200" width="320">
                         </a>

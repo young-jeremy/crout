@@ -8,12 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Document Title, Description, and Author -->
-  <title>Console - Free Bootstrap Admin Template</title>
+  <title>Contact Us</title>
   <meta name="description" content="Console is a Free Bootstrap Admin Template.">
-  <meta name="author" content="BootstrapBrain">
+  <meta name="author" content="ChristianOutreach">
 
   <!-- Favicon and Touch Icons -->
-  <link rel="icon" type="image/png" sizes="512x512" href="./assets/favicon/favicon-512x512.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="{% static '/assets/favicon/favicon-512x512.png' %}">
 
   <!-- Google Fonts Files -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,7 +67,7 @@
                   </div>
                   <div>
                     <h4 class="mb-3">Address</h4>
-                    <address class="mb-0 text-secondary">8014 Edith Blvd NE, Albuquerque, New York, United States</address>
+                    <address class="mb-0 text-secondary">Straße des 17. Juni 135, 10623 Berlin, Germany</address>
                   </div>
                 </div>
                 <div class="row mb-5">
@@ -81,7 +81,7 @@
                       <div>
                         <h4 class="mb-3">Phone</h4>
                         <p class="mb-0">
-                          <a class="link-secondary text-decoration-none" href="tel:+15057922430">(505) 792-2430</a>
+                          <a class="link-secondary text-decoration-none" href="tel:+15057922430">(49) 792-2430</a>
                         </p>
                       </div>
                     </div>
@@ -97,7 +97,7 @@
                       <div>
                         <h4 class="mb-3">E-Mail</h4>
                         <p class="mb-0">
-                          <a class="link-secondary text-decoration-none" href="mailto:demo@yourdomain.com">demo@yourdomain.com</a>
+                          <a class="link-secondary text-decoration-none" href="mailto:jeremymayaka96@gmail.com">jeremymayaka96@gmail.com</a>
                         </p>
                       </div>
                     </div>
@@ -128,11 +128,12 @@
           <div class="col-12 col-lg-6">
             <div class="bg-white border rounded shadow-sm overflow-hidden">
 
-              <form action="#!">
+              <form action="{% url 'dashboard:pages_contact' %}" method="post">
+                {% csrf_token %}
                 <div class="row gy-4 gy-xl-5 p-4 p-xl-5">
                   <div class="col-12">
-                    <label for="fullname" class="form-label">Full Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="fullname" name="fullname" value="" required>
+                    <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" value="" required>
                   </div>
                   <div class="col-12 col-md-6">
                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>

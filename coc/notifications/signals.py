@@ -9,8 +9,22 @@ from videos.models import *  # Assuming this is your video model
 from videos.models import Comments
 # signals.py
 from videos.models import Content
-
 from .models import Notifications
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+from .utils import send_email_notification
+
+
+@receiver(post_save, sender=User)
+def notify_on_password_change(sender, instance, **kwargs):
+    if instance.password:  # Password has been updated
+        send_email_notification(
+            instance,
+            subject="Password Reset Successful",
+            message="Your password has been reset successfully. If this was not you, please contact support immediately."
+        )
+
 
 
 @receiver(post_save, sender=Comments)
@@ -42,8 +56,8 @@ def send_notification_email(instance, created, **kwargs):
         # Customize the email sending logic as per your requirements
         subject = f"New content added: {instance.title}"
         message = f"Check out the new content titled '{instance.title}' in the category {instance.category}."
-        recipient_list = ["recipient@example.com"]
-        send_mail(subject, message, "from@example.com", recipient_list)
+        recipient_list = ["jeremymayaka96@gmail.com"]
+        send_mail(subject, message, "jeremymayaka96@gmail.com", recipient_list)
 
 
 def notify(user, message, video=None):

@@ -6,6 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.text import slugify
 
+from services.models import Channel
+
 # from django.dispatch import receiver
 # from django.db.models.signals import post_save
 
@@ -104,6 +106,7 @@ class User(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE, null=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)

@@ -1,0 +1,7 @@
+# templates/notifications/email_notification.txt
+Hello {{ user.first_name }},
+
+{{ message }}
+
+Thank you,
+The CROUT Team

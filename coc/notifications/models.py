@@ -3,11 +3,27 @@ from django.db import models
 from accounts.models import User
 
 from videos.models import Content
+# notifications/models.py
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils.timezone import now
+
+class VideoNotification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='video_notifications')
+    video_title = models.CharField(max_length=255)
+    video_url = models.URLField()
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.video_title} Notification"
+
 
 
 class NotificationSettings(models.Model):
     # User associated with these settings
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     # Notification preferences for various actions
     email_on_password_change = models.BooleanField(default=True)
@@ -70,8 +86,16 @@ class NotificationSettings(models.Model):
         return False  # Default is no notification
 
 
+
+
 class Notifications(models.Model):
-    notification_type = models.CharField(max_length=155, null=True)
+    NOTIFICATION_TYPES = (
+        ('video', 'Video Notification'),
+        ('email', 'Email Notification'),
+        ('account', 'Account Notification'),
+        ('other', 'Other Notification'),
+    )
+    notification_type = models.CharField(max_length=155, choices=NOTIFICATION_TYPES)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     message = models.TextField()
     date_created = models.DateTimeField(auto_now_add=True)
@@ -79,7 +103,21 @@ class Notifications(models.Model):
     video = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"Notification for {self.user} on {self.date_created}"
+        return f"{self.notification_type} - {self.message}"
+
+
+# notifications/models.py
+from django.db import models
+from django.contrib.auth.models import User
+
+class EmailNotification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='email_notifications')
+    subject = models.CharField(max_length=255)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Email to {self.user.email} - {self.subject}"
 
 
 

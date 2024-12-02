@@ -12,7 +12,7 @@ urlpatterns = [
     path('charts/', views.charts, name='charts'),
     path('tables/', views.tables, name='tables'),
     path('tables_accented/', views.tables_accented,name='table_accented'),
-    path('colors/', views.colors, name='colors'),
+    path('colors/', views.utilities_color, name='colors'),
     path('borders/', views.borders, name='borders'),
     path('animations/', views.animations, name='animations'),
     path('other/', views.other, name='other'),
@@ -39,5 +39,6 @@ urlpatterns = [
     path('pages_blank/', views.pages_blank,name='pages_blank'),
     path('auth_reset/', views.auth_reset,name='auth_reset'),
     path('icons/', views.icons,name='icons'),
+    path('contact/success/', views.success_view, name='contact_success'),  # Success page
 
 ]

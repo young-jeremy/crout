@@ -11,19 +11,24 @@
             <!-- Featured blog post-->
             <div class="card mb-4">
                 <div class="video-player">
-                    <video controls id="video-player" width="100%">
+                    <video autoplay controls height="100%" id="video-player" width="100%">
                         <source src="{{ video.path.url }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
-                <div class="small text-muted "><span class="badge text-bg-primary">{{ video.category }}</span></div>
+                <h2 class="card-title">{{ video.title }}</h2>
 
                 <div class="card-body">
-                    <h2 class="card-title">{{ video.title }}</h2>
                     <div class="button-container">
                         <img class="rounded-circle" height="35" src="{{ user.google_picture }}">
                         <span>{{ user.google_username }}</span>
-                        <button class="rounded-top border border-dark">Subscribe</button>
+                        <button class="rounded-top border border-dark">
+                            {% if is_subscribed %}
+                            <a href="{% url 'services:unsubscribe' video.id %}">Unsubscribe</a>
+                            {% else %}
+                            <a href="{% url 'services:subscribe' video.id %}">Subscribe</a>
+                            {% endif %}
+                        </button>
                         <button class="rounded-right border border-dark">like</button>
                         <button class="rounded-bottom border border-dark">share</button>
                         <button class="rounded-left border border-dark">report</button>
@@ -56,8 +61,8 @@
             </div>
             <!-- comments -->
             <section>
-                <div class="card bg-light">
-                    <div class="card-body">
+                <div class="card bg-light" style="border-bottom: none;">
+                    <div class="card-body" style="border-bottom: none;">
                         <!-- Comment form-->
                         <form action="{% url 'videos:add_comments' video.id %}" class="mb-4" method="post">
                             {% csrf_token %}
@@ -75,28 +80,18 @@
                                 <img alt="..."
                                      class="rounded-circle"
                                      height="45" src="{{ user.google_picture }}" width="45"/><span></span>
+                                {{ comment.created_at }}
                             </a>
                             </div>
                             <div class="ms-3">
                                 {% for comment in video.comments.all %}
-                                <div class="fw-bold">{{ user.username }}</div>
+                                <div class="fw-bold">{{ user.username }} <span class="text-muted small-text" >{{ comment.created_at }}</span></div>
                                 {{ comment.text }}
                                 <!-- Child comment 1-->
-                                <div class="d-flex mt-4">
-                                    <div class="flex-shrink-0"><img alt="..."
-                                                                    class="rounded-circle"
-                                                                    height="35" src="{{ user.profile.avatar.url }}"
-                                                                    width="35"/>
-                                    </div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">{{ user.username }}</div>
-                                        <ul>
-                                            {% for comment in video.comments.all %}
-                                            <li>{{ comment.text }} - {{ comment.created_at }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                </div>
+
+
+
+
                                 <!-- Child comment 2-->
                                 <div class="d-flex mt-4">
                                     <div class="flex-shrink-0"><img alt="..."
@@ -104,26 +99,16 @@
                                                                     height="35" src="{{ user.profile.avatar.url }}"
                                                                     width="35"/>
                                     </div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">{{ user.username }}</div>
-                                        When you put money directly to a problem, it makes a good headline.
-                                    </div>
+
                                 </div>
+                                                                                                    <a href="{% url 'videos:post_comment' comment.id %}">Reply</a>
+
                                 {% endfor %}
+
                             </div>
+
                         </div>
-                        <!-- Single comment-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><img alt="..."
-                                                            class="rounded-circle"
-                                                            height="35" src="{{ user.profile.avatar.url }}" width="35"/>
-                            </div>
-                            <div class="ms-3">
-                                <div class="fw-bold">{{ user.username }}</div>
-                                When I look at the universe and all the ways the universe wants to kill us, I find it
-                                hard to reconcile that with statements of beneficence.
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </section>

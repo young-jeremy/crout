@@ -1,0 +1,52 @@
+{% extends 'base_dashboard.html' %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Notifications</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+{% block content %}
+<body>
+<div class="container">
+    <h1>Video Notifications</h1>
+    <div id="notifications-container">
+        <!-- Notifications will be dynamically loaded here -->
+    </div>
+
+    <script>
+        // Fetch notifications via AJAX
+        function fetchNotifications() {
+            $.get('/notifications/video_notifications/', function(data) {
+                let container = $('#notifications-container');
+                container.html('');  // Clear the container
+                data.forEach(notification => {
+                    let notificationElement = `
+                        <div style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+                            <h3>${notification.video_title}</h3>
+                            <p>${notification.message}</p>
+                            <a href="${notification.video_url}" target="_blank">Watch Video</a>
+                            <button onclick="markAsRead(${notification.id})">Mark as Read</button>
+                        </div>
+                    `;
+                    container.append(notificationElement);
+                });
+            });
+        }
+
+        // Mark notification as read
+        function markAsRead(notificationId) {
+            $.post(`/notifications/mark_as_read/${notificationId}/`, function(response) {
+                alert(response.message);
+                fetchNotifications();  // Refresh notifications
+            });
+        }
+
+        // Load notifications when the page is ready
+        $(document).ready(function() {
+            fetchNotifications();
+        });
+    </script>
+</div>
+</body>
+
+{% endblock content %}

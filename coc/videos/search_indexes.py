@@ -1,8 +1,7 @@
-# videos/search_indexes.py
 from haystack import indexes
 from .models import Content
 
-class ContentIndex(indexes.SearchIndex, indexes.Indexable):
+class VideoIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     title = indexes.CharField(model_attr='title')
     description = indexes.CharField(model_attr='description')

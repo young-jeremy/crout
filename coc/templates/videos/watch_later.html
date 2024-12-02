@@ -2,12 +2,15 @@
 {% extends "base_dashboard.html" %}
 
 {% block content %}
+<div class="container">
   <h1>Watch Later Videos</h1>
   <ul>
     {% for watch_later_video in watch_later_videos %}
       <li>
-        <a href="{% url 'videos:video_details' watch_later_video.id %}">{{ watch_later_video.video.title }}</a>
-        <a href="{% url 'videos:remove_from_watch_later' watch_later_video.id %}">Remove from Watch Later</a>
+        <div class="card video-card">
+          <a href="{% url 'videos:video_details' watch_later_video.id %}">{{ watch_later_video.title }}</a>
+        </div>
+          <a href="{% url 'videos:remove_from_watch_later' watch_later_video.id %}">Remove from Watch Later</a>
       </li>
     {% empty %}
     <p>There are no videos on the watch later section</p>

@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from .forms import *
+from allauth.socialaccount.models import SocialAccount
+from notifications.models import Notifications
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
@@ -10,7 +12,6 @@ from django import views
 from django.views.generic import ListView
 from .admin import *
 from django.http import JsonResponse
-# from .models import Subscription
 import stripe
 from videos.models import *
 from google.cloud import vision
@@ -25,7 +26,7 @@ from .forms import *
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 import requests
 from django.template.loader import render_to_string
 import django.utils.encoding
@@ -56,6 +57,63 @@ from django.contrib.auth import update_session_auth_hash
 from django.core.mail import send_mail
 from .forms import CustomPasswordChangeForm
 from notifications.models import *
+from django.contrib.auth.views import PasswordResetCompleteView
+from django.shortcuts import redirect
+from notifications.utils import send_email_notification
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from allauth.account.signals import password_changed
+from django.dispatch import receiver
+from notifications.utils import send_email_notification
+
+
+@receiver(password_changed)
+def notify_password_changed(request, user, **kwargs):
+    send_email_notification(
+        user,
+        subject="Password Reset Successful",
+        message="Your password has been reset successfully. If this was not you, please contact support immediately."
+    )
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    def dispatch(self, *args, **kwargs):
+        response = super().dispatch(*args, **kwargs)
+
+        # Send notification
+        user_email = self.request.session.get('reset_user_email')  # Store email in session during reset
+        if user_email:
+            try:
+                user = User.objects.get(email=user_email)
+                send_email_notification(
+                    user,
+                    subject="Password Reset Successful",
+                    message="Your password has been reset successfully. If this was not you, please contact support immediately."
+                )
+            except User.DoesNotExist:
+                pass  # Handle invalid user email
+
+        return response
+
+
+def custom_password_reset_confirm(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        # Handle password reset form submission and saving here
+        # After saving the new password:
+        send_email_notification(
+            user,
+            subject="Password Reset Successful",
+            message="Your password has been reset successfully. If this was not you, please contact support immediately."
+        )
+        return redirect('password_reset_complete')
+    else:
+        return HttpResponse("Password reset link is invalid or expired.")
 
 
 def accounts_settings_and_privacy(request):
@@ -211,6 +269,12 @@ def password_reset_request(request):
         'password_reset_form': password_reset_form,
     }
     return render(request, template_name, context)
+
+
+def mark_all_as_read(request):
+    template_name = 'users/notifications.html'
+    Notifications.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    return redirect('notifications:notifications')
 
 
 def register_view(request):
@@ -434,34 +498,51 @@ def register_new_user(request):
 
 @login_required
 def profile_view(request):
+    # Check if the user is logged in through Google or a local account
     try:
-        # Check if the user has a profile, if not, redirect to the profile creation page
-        profile = request.user.profile
-    except UserProfile.DoesNotExist:
-        # If profile does not exist, redirect to profile creation page
-        return redirect('accounts:create_profile')  # Replace 'create_profile' with the actual URL name for profile creation page
+        if request.method == 'POST':
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
 
-    if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
-            u_form.save()
-            p_form.save()
-            messages.success(request, f'Your account has been updated!')
-            return redirect('accounts:profile')  # Redirect back to profile page
+            if u_form.is_valid() and p_form.is_valid():
+                u_form.save()
+                p_form.save()
+                messages.success(request, f'Your account has been updated!')
+                return redirect('accounts:profile')  # Redirect back to profile page
 
-    else:
-        u_form = UserUpdateForm(instance=request.user)
-        p_form = ProfileUpdateForm(instance=request.user.profile)
+        else:
+            u_form = UserUpdateForm(instance=request.user)
+            p_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = {
-        'u_form': u_form,
-        'p_form': p_form
-    }
+        # Check for Google profile picture (if the user is logged in with Google)
+        if hasattr(request.user, 'socialaccount_set'):
+            social_account = SocialAccount.objects.filter(user=request.user, provider='google').first()
+            if social_account:
+                profile_picture = social_account.get_avatar_url()  # Get Google profile picture URL
+            else:
+                # Fallback to local user profile picture
+                profile_picture = request.user.profile.avatar.url if request.user.profile.avatar.url else None
+        else:
+            # User is logged in with a local account, show local profile picture
+            profile_picture = request.user.profile.avatar.url if request.user.profile.avatar.url else None
 
-    return render(request, 'accounts/profile.html', context)
+        # If user is not logged in, show the public profile picture of the other user (viewing other's profile)
+        if not request.user.is_authenticated:
+            profile_picture = request.user.profile.profile_picture.url if request.user.profile.profile_picture else None
+
+        # Prepare context for rendering the profile page
+        context = {
+            'u_form': u_form,
+            'p_form': p_form,
+            'profile_picture': profile_picture
+        }
+
+        return render(request, 'accounts/profile.html', context)
+
+    except User.DoesNotExist:
+        # Handle case where user does not exist
+        messages.error(request, "User not found!")
+        return redirect('dashboard:dashboard')  # Redirect to home page or error page
 
 
 @login_required

@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -17,12 +16,63 @@ from twilio.twiml.messaging_response import MessagingResponse
 from videos.models import *
 from videos.models import Comments
 from videos.models import Content
+# notifications/views.py
+from django.shortcuts import render
+from .models import EmailNotification
+# notifications/views.py
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from .models import VideoNotification
+from .serializers import VideoNotificationSerializer
+from rest_framework.decorators import api_view
+
+
+@api_view(['GET'])
+def video_notifications_list(request):
+    notifications = VideoNotification.objects.filter(user=request.user).order_by('-timestamp')
+    serializer = VideoNotificationSerializer(notifications, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['POST'])
+def mark_notification_as_read(request, notification_id):
+    notification = get_object_or_404(VideoNotification, id=notification_id, user=request.user)
+    notification.is_read = True
+    notification.save()
+    return JsonResponse({'message': 'Notification marked as read.'})
+
+
+
+@login_required()
+def email_notifications_list(request):
+    email_notifications = EmailNotification.objects.all().order_by('-timestamp')
+    total_emails = EmailNotification.objects.all()
+    email_count = total_emails.count()
+    # Fetch all notifications
+    return render(request, 'notifications/email_notifications.html', {'email_notifications': email_notifications})
+
+
 
 from .forms import NotificationSettingsForm
 from .models import Notifications
+from .utils import send_email_notification
 
 
-# notifications/views.py
+def send_email_notification(user, subject, message):
+    if not user or not user.email:
+        raise ValueError("Invalid user or email.")
+
+    # Save the notification details in the database
+    EmailNotification.objects.create(user=user, subject=subject, message=message)
+
+    # Send the email
+    send_mail(
+        subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [user.email],
+        fail_silently=False,
+    )
 
 
 @csrf_exempt
@@ -73,13 +123,22 @@ def notifications_settings(request):
     return render(request, 'accounts/profile.html', {'form': form})
 
 
-def video_notifications(request, video_id):
-    video = Comments.objects.get(id=video_id)
-    template_name = 'videos/video_notifications.html'
-    return render(request, template_name)
+def video_notifications(request):
+    video_notification = VideoNotification.objects.all()
+    video_notifications_count = video_notification.count()
+    template_name = 'notifications/video_notifications.html'
+    return render(request, template_name, {'video_notification': video_notification})
+
+
+def email_notification(request):
+    email_notifications = Notifications.objects.filter(notification_type=request.user)
+    template_name = 'notifications/email_notifications.html'
+    return render(request, template_name, {'email_notifications': email_notifications})
 
 
 def notification_view(request, video_id, account_id):
+    total_notifications = Notifications.objects.all()
+    notifications_count = total_notifications.count()
     template_name = 'notifications/notification_view.html'
     comment_notification = Comments.objects.get(id=video_id)
     video_notification = Content.objects.get(id=vieo_id)
@@ -100,16 +159,6 @@ def update_video_notification(sender, instance, **kwargs):
             )
 
 
-@receiver(post_save, sender=Content)
-def create_video_notification(sender, instance, created, **kwargs):
-    if created:
-        # Create notification for all users
-        Notifications.objects.create(
-            user=instance.uploader.video,
-            message=f"A new video '{instance.video.title}' has been uploaded.",
-            notification_type='video'
-        )
-
 
 def send_push_notification(token, title, message):
     message = messaging.Message(
@@ -124,22 +173,9 @@ def send_push_notification(token, title, message):
     print('Successfully sent message:', response)
 
 
-
-
-def send_email_notification(subject, message, recipient_list):
-    send_mail(
-        subject,
-        message,
-        settings.EMAIL_HOST_USER,
-        recipient_list,
-        fail_silently=False,
-    )
-
-
-
-
 def send_notification(sender, recipient, message):
     notify.send(sender, recipient=recipient, verb='sent you a message', description=message)
+
 
 # In views
 def create_comment_notification(request, pk):
@@ -148,17 +184,22 @@ def create_comment_notification(request, pk):
     send_notification(request.user, comment.user, 'You have a new comment on your post')
 
 
-
 @login_required
 def notifications_view(request):
     # Get all notifications for the logged-in user
     notifications = Notifications.objects.filter(user=request.user).order_by('-date_created')
     notifications_count = Notifications.objects.all().count()
-
+    categorized_notifications = {
+        'video': notifications.filter(notification_type='video'),
+        'email': notifications.filter(notification_type='email'),
+        'account': notifications.filter(notification_type='account'),
+        'other': notifications.filter(notification_type='other'),
+    }
+    email_notifications = notifications.filter(notification_type='email')
     # Optionally, mark all notifications as read
-    # notifications.update(is_read=True)
+    notifications.update(is_read=True)
 
-    return render(request, 'notifications/all_notifications.html', {'notifications': notifications})
+    return render(request, 'notifications/all_notifications.html', {'notifications': notifications, 'categorized_notification':categorized_notifications})
 
 
 from django.core.mail import send_mail
@@ -175,6 +216,3 @@ def send_notification_email(user_email):
     except Exception as e:
         print("Email send failed:", e)
         # Optionally log or show an error message
-
-
-

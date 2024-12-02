@@ -1,0 +1,14 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+{% if results %}
+    <h2>Search Results:</h2>
+    <ul>
+    {% for result in results %}
+        <li><a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+
+{% endblock content %}

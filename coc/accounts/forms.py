@@ -26,6 +26,8 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 
 
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile

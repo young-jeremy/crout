@@ -1,9 +1,10 @@
 # utils.py
 #from moviepy.editor import VideoFileClip
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from moviepy.video.io.VideoFileClip import VideoFileClip
 
 
-"""def get_video_duration(video_file):
+def get_video_duration(video_file):
     try:
         if isinstance(video_file, InMemoryUploadedFile):
             # Ensure the file is an uploaded file
@@ -15,4 +16,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
     except Exception as e:
         # Handle any exceptions that may occur when reading the video
         return 0  # Return 0 if unable to get the duration
-"""
+
+
+def check_for_nudity(image):
+    # your implementation
+    pass

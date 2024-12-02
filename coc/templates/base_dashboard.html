@@ -7,7 +7,7 @@
 <head>
     <!-- Required Meta Tags -->
     <meta charset="utf-8">
-    <meta name="google-adsense-account" content="ca-pub-7500012205346003">
+    <meta content="ca-pub-7500012205346003" name="google-adsense-account">
     <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <!-- Document Title, Description, and Author -->
@@ -24,6 +24,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet">
     <link href="{% static 'css/home_icon.css' %}" rel="stylesheet">
+        <link href="{% static 'css/dark_mode.css' %}" rel="stylesheet">
+
     <!-- CSS Files -->
     <link href="{% static 'assets/css/console-bsb.css' %}" rel="stylesheet">
     <link href="{% static 'assets/css/settings_privacy.css' %}" rel="stylesheet">
@@ -32,8 +34,8 @@
     <link href="https://cdn.jsdelivr.net/npm/jsvectormap/dist/css/jsvectormap.min.css" rel="stylesheet">
 
     <!-- ads-->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7500012205346003"
-     crossorigin="anonymous">
+    <script async crossorigin="anonymous"
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7500012205346003">
 
     </script>
     <script async crossorigin="anonymous"
@@ -42,6 +44,16 @@
 
     <!-- BSB Head -->
 </head>
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 
 <body>
 
@@ -51,7 +63,8 @@
         <div class="container">
             <ul class="navbar-nav">
                 <li class="nav-item me-3">
-                    <a aria-controls="bsbSidebar1" class="nav-link" data-bs-target="#bsbSidebar1" data-bs-toggle="offcanvas"
+                    <a aria-controls="bsbSidebar1" class="nav-link" data-bs-target="#bsbSidebar1"
+                       data-bs-toggle="offcanvas"
                        href="#!">
                         <i class="bi-filter-left fs-3 lh-1"></i>
                     </a>
@@ -61,7 +74,8 @@
                 <img alt="Christian Outreach Logo" class="bsb-tpl-logo" height="30" src="{% static 'img/crout.webp' %}"
                      width="50"><span>CROUT</span>
             </a>
-            <button aria-controls="bsbNavbar" aria-label="Toggle Navigation" class="navbar-toggler border-0" data-bs-target="#bsbNavbar"
+            <button aria-controls="bsbNavbar" aria-label="Toggle Navigation" class="navbar-toggler border-0"
+                    data-bs-target="#bsbNavbar"
                     data-bs-toggle="collapse" type="button">
                 <i class="bi bi-three-dots"></i>
             </button>
@@ -69,21 +83,25 @@
                 <ul class="navbar-nav bsb-dropdown-menu-responsive ms-auto align-items-center">
                     <li class="nav-item dropdown">
                         <a aria-expanded="false"
-                           class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" data-bs-toggle="dropdown" href="{% url 'videos:video_search' %}"
+                           class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" data-bs-toggle="dropdown"
+                           href="{% url 'videos:video_search' %}"
                            role="button">
                 <span class="position-relative">
                   <i class="bi bi-search"></i>
                 </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation bsb-fadeIn">
-                            <form action="{% url 'videos:video_search' %}" class="row g-1 px-3 py-2 align-items-center"
+                            <form action="{% url 'videos:search_for_videos' %}"
+                                  class="row g-1 px-3 py-2 align-items-center"
                                   method="get">
                                 {% csrf_token %}
                                 <div class="col-8">
-                                    {{ form.query }}
                                 </div>
                                 <div class="col-8">
-                                    <input class="form-control" id="form" type="text">
+                                    <input class="form-control" name="q" placeholder="Search..." type="text"
+                                           value="{{ query }}">
+
+
                                 </div>
                                 <div class="col-4">
                                     <button class="btn btn-primary" type="submit">Search</button>
@@ -92,7 +110,8 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" data-bs-toggle="dropdown"
+                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable"
+                           data-bs-toggle="dropdown"
                            href="#" role="button">
                 <span class="position-relative">
                   <i class="bi bi-globe"></i>
@@ -110,7 +129,8 @@
                                     <div class="row g-0 align-items-center">
                                         <div class="col-2">
                                             <img alt="Arabic"
-                                                 class="img-fluid rounded-pill" src="{% static 'assets/img/translation/flag-img-1.svg' %}">
+                                                 class="img-fluid rounded-pill"
+                                                 src="{% static 'assets/img/translation/flag-img-1.svg' %}">
                                         </div>
                                         <div class="col-10">
                                             <div class="ps-3">
@@ -123,7 +143,8 @@
                                     <div class="row g-0 align-items-center">
                                         <div class="col-2">
                                             <img alt="Chinese"
-                                                 class="img-fluid rounded-pill" src="{% static 'assets/img/translation/flag-img-2.svg' %}">
+                                                 class="img-fluid rounded-pill"
+                                                 src="{% static 'assets/img/translation/flag-img-2.svg' %}">
                                         </div>
                                         <div class="col-10">
                                             <div class="ps-3">
@@ -136,7 +157,8 @@
                                     <div class="row g-0 align-items-center">
                                         <div class="col-2">
                                             <img alt="English"
-                                                 class="img-fluid rounded-pill" src="{% static 'assets/img/translation/flag-img-3.svg' %}">
+                                                 class="img-fluid rounded-pill"
+                                                 src="{% static 'assets/img/translation/flag-img-3.svg' %}">
                                         </div>
                                         <div class="col-10">
                                             <div class="ps-3">
@@ -149,7 +171,8 @@
                                     <div class="row g-0 align-items-center">
                                         <div class="col-2">
                                             <img alt="French"
-                                                 class="img-fluid rounded-pill" src="{% static 'assets/img/translation/flag-img-4.svg' %}">
+                                                 class="img-fluid rounded-pill"
+                                                 src="{% static 'assets/img/translation/flag-img-4.svg' %}">
                                         </div>
                                         <div class="col-10">
                                             <div class="ps-3">
@@ -168,7 +191,8 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" data-bs-toggle="dropdown"
+                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable"
+                           data-bs-toggle="dropdown"
                            href="#" role="button">
                 <span class="position-relative pt-1">
                   <i class="bi bi-camera-video"></i>
@@ -187,10 +211,11 @@
                             </div>
                             <div class="list-group list-group-flush">
                                 <a aria-current="true"
-                                   class="list-group-item list-group-item-action" href="{% url 'videos:create_content' %}">
+                                   class="list-group-item list-group-item-action"
+                                   href="{% url 'videos:create_content' %}">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-2">
-                                            <i class="bi bi-youtube"></i>
+                                            <i class="bi-camera-video mb-3"></i>
                                         </div>
                                         <div class="col-10">
                                             <div class="ps-3">
@@ -204,12 +229,8 @@
                                    href="{% url 'videos:record_video' %}">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-2">
-                                            <svg class="bi bi-camera-reels" fill="currentColor" height="16"
-                                                 viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M6 3a3 3 0 1 1-6 0 3 3 0 0 1 6 0M1 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0"/>
-                                                <path d="M9 6h.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 7.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 16H2a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm6 8.73V7.27l-3.5 1.555v4.35zM1 8v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1"/>
-                                                <path d="M9 6a3 3 0 1 0 0-6 3 3 0 0 0 0 6M7 3a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
-                                            </svg>
+                                            <i class="bi-camera mb-3"></i>
+
                                         </div>
                                         <div class="col-10">
                                             <div class="ps-3">
@@ -229,12 +250,13 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" data-bs-toggle="dropdown"
+                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable"
+                           data-bs-toggle="dropdown"
                            href="#" role="button">
                 <span class="position-relative pt-1">
                   <i class="bi bi-bell"></i>
                   <span class="p-1 bg-accent border border-light rounded-circle position-absolute top-0 start-100 translate-middle">
-                    <span class="visually-hidden">New Notifications</span>
+                    <span class="visually-hidden">{{ notifications.count }}</span>
                   </span>
                 </span>
                         </a>
@@ -247,24 +269,13 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-center" href="#!">
+                                <a class="dropdown-item d-flex align-items-center"
+                                   href="{% url 'notifications:email_notifications' %}">
                     <span>
                       <i class="bi bi-envelope-fill me-2"></i>
                       <span class="fs-7">Email Notifications</span>
                     </span>
-                                    <span class="fs-7 ms-auto text-secondary">5 mins</span>
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center" href="#!">
-                    <span>
-                      <i class="bi bi-person-fill me-2"></i>
-                      <span class="fs-7">Account Notifications</span>
-                    </span>
-                                    <span class="fs-7 ms-auto text-secondary">17 hours</span>
+                                    <span class="fs-7 ms-auto text-secondary">{{ email_notifications.timestamp }}| {{ email_count }}</span>
                                 </a>
                             </li>
                             <li>
@@ -272,12 +283,25 @@
                             </li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center"
-                                   href="{% url 'notifications:video_notifications' %}">
+                                   href="{% url 'notifications:notifications_settings' %}">
+                    <span>
+                      <i class="bi bi-person-fill me-2"></i>
+                      <span class="fs-7">Account Notifications</span>
+                    </span>
+                                    <span class="fs-7 ms-auto text-secondary">{{ notifications.timestamp }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center"
+                                   href="{% url 'notifications:video_notifications_list' %}">
                     <span>
                       <i class="bi bi-file-earmark-fill me-2"></i>
                       <span class="fs-7">Video Notifications</span>
                     </span>
-                                    <span class="fs-7 ms-auto text-secondary">{{ notification.date_created }}</span>
+                                    <span class="fs-7 ms-auto text-secondary">{{ notification.date_created }} {{ video_notifications_count }}</span>
                                 </a>
                             </li>
                             <li>
@@ -288,10 +312,21 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" data-bs-toggle="dropdown"
+                        <a aria-expanded="false" class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable"
+                           data-bs-toggle="dropdown"
                            href="#" role="button">
-                            <img alt="...e" class="img-fluid rounded-circle" height="35" src="{{ user.google_picture }}"
-                                 width="35">
+
+                            {% if user.socialaccount_set.count > 0 %}
+                                    <!-- If the user is logged in via Google, use the Google profile picture -->
+                                    <img src="{{ user.socialaccount_set.first.profile.picture.url }}" alt="gpp" style="width: 150px; height: 150px; border-radius: 50%;">
+                                {% elif request.user.profile.profile_picture %}
+                                    <!-- If it's a local account, use the profile picture from Profile model -->
+                                    <img src="{{ request.user.profile.profile_picture.url }}" alt="LPP" style="width: 150px; height: 150px; border-radius: 50%;">
+                                {% else %}
+                                    <!-- Default image if no profile picture is found -->
+                                    <img src="/static/img/undraw_profile.svg" alt="DPP" style="width: 35px; height: 35px; border-radius: 50%;">
+                                {% endif %}
+
                         </a>
                         <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation bsb-fadeIn">
                             <li>
@@ -301,8 +336,16 @@
                                 <a aria-current="true" class="dropdown-item" href="{% url 'account_email' %}">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-3">
-                                            <img alt="Google User Photo" class="img-fluid rounded-circle" height="55"
-                                                 src="{{ user.google_picture }}" width="55">
+                                            {% if user.socialaccount_set.count > 0 %}
+                                                    <!-- If the user is logged in via Google, use the Google profile picture -->
+                                            <img src="{{ user.socialaccount_set.first.profile.picture.url }}" alt="Google Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
+                                            {% elif request.user.profile.profile_picture %}
+                                                <!-- If it's a local account, use the profile picture from Profile model -->
+                                                <img src="{{ request.user.profile.profile_picture.url }}" alt="Local Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
+                                            {% else %}
+                                                <!-- Default image if no profile picture is found -->
+                                                <img src="/static/img/undraw_profile.svg" alt="Default Profile Picture" style="width: 25px; height: 25px; border-radius: 50%;">
+                                            {% endif %}
                                         </div>
                                         <div class="col-9">
                                             <div class="ps-3">
@@ -328,7 +371,7 @@
                                 <a class="dropdown-item" href="{% url 'notifications:notifications' %}">
                     <span>
                       <i class="bi bi-bell-fill me-2"></i>
-                      <span class="fs-7">Notifications</span>
+                      <span class="fs-7">{{ notifications_count }}Notifications</span>
                     </span>
                                 </a>
                             </li>
@@ -353,6 +396,14 @@
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <span>
+                                     <i class="bi bi-moon-fill"></i>
+                                      <span class="fs-7"> <button id="theme-toggle" class="rounded-corner">Switch to Dark Mode</button></span>
+                                    </span>
+                                </a>
                             </li>
                             <li>
                                 <a class="dropdown-item text-center" href="{% url 'account_logout' %}">
@@ -387,7 +438,8 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a aria-controls="dashboardExamples" aria-expanded="true"
-                       class="nav-link p-3 bg-light rounded active" data-bs-toggle="collapse" href="{% url 'videos:category_list' %}"
+                       class="nav-link p-3 bg-light rounded active" data-bs-toggle="collapse"
+                       href="#"
                        role="button">
                         <div class="nav-link-icon text-primary">
                             <img alt="Home Icon" class="icon-home" src="{% static 'img/home.webp' %}"/>
@@ -400,13 +452,62 @@
                         <ul class="nav flex-column ms-4">
                             <li class="nav-item">
                                 <a aria-current="page" class="nav-link link-primary active"
-                                   href="{% url 'videos:category_list' %}">
+                                   href="{% url 'videos:short_video_list' %}">
                                     <div class="nav-link-icon text-primary-emphasis">
-                                        <i class="bi bi-arrow-right-short"></i>
-                                    </div>
-                                    <span class="nav-link-text">categories</span>
+                                        <i class="bi bi-camera-reels"></i></div>
+                                    <span class="nav-link-text">reels</span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link link-primary active"
+                                   href="{% url 'services:subscriptions' %}">
+                                    <div class="nav-link-icon text-primary-emphasis">
+                                        <img height="20" src="{% static 'icons/subscribe.png' %}">
+                                    </div>
+                                    <span class="nav-link-text">Subscriptions</span>
+                                    <div>
+                                        <ul>
+                                            {% for subscriber in channel.subscribers.all %}
+                                            <li>{{ subscriber.username }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link link-primary active"
+                                   href="{% url 'services:subscriptions' %}">
+                                    <div class="nav-link-icon text-primary-emphasis">
+                                        <img height="20" src="{% static 'icons/subscribe.png' %}">
+                                    </div>
+                                    <span class="nav-link-text">Subscriptions</span>
+                                    <div>
+                                        <ul>
+                                            {% for subscriber in channel.subscribers.all %}
+                                            <li>{{ subscriber.username }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link link-primary active"
+                                   href="{% url 'services:subscriptions' %}">
+                                    <div class="nav-link-icon text-primary-emphasis">
+                                        <img height="20" src="{% static 'icons/subscribe.png' %}">
+                                    </div>
+                                    <span class="nav-link-text">Gospel Music</span>
+                                    <div>
+                                        <ul>
+                                            {% for subscriber in channel.subscribers.all %}
+                                            <li>{{ subscriber.username }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </a>
+                            </li>
+
+
                         </ul>
                     </div>
                 </li>
@@ -415,49 +516,77 @@
                     <h6 class="py-1 text-secondary text-uppercase fs-7">CATEGORIES</h6>
                 </li>
                 <li class="nav-item">
-                    <a aria-controls="componentExamples" aria-expanded="false" class="nav-link p-3" data-bs-toggle="collapse"
+                    <a aria-controls="componentExamples" aria-expanded="false" class="nav-link p-3"
+                       data-bs-toggle="collapse"
                        href="#componentExamples" role="button">
                         <div class="nav-link-icon text-primary">
-                            <i class="bi bi-menu-button-wide-fill"></i>
+                            <i class="bi bi-person-fill"></i>
                         </div>
-                        <span class="nav-link-text fw-bold">Components</span>
+                        <span class="nav-link-text fw-bold">{{ request.user.google_username }}</span>
                     </a>
                     <div class="collapse" id="componentExamples">
                         <ul class="nav flex-column ms-4">
                             <li class="nav-item">
                                 <a aria-current="page" class="nav-link link-secondary"
-                                   href="{% url 'dashboard:accordion' %}">
+                                   href="{% url 'videos:your_videos' %}">
                                     <div class="nav-link-icon text-primary-emphasis">
-                                        <i class="bi bi-arrow-right-short"></i>
+                                        <i class="bi bi-play-btn-fill"></i>
                                     </div>
-                                    <span class="nav-link-text">Accordion</span>
+                                    <span class="nav-link-text">My Videos</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a aria-current="page" class="nav-link link-secondary"
-                                   href="{% url 'dashboard:components_alerts' %}">
+                                   href="{% url 'videos:liked_videos' %}">
                                     <div class="nav-link-icon text-primary-emphasis">
-                                        <i class="bi bi-arrow-right-short"></i>
+                                        <i class="bi bi-hand-thumbs-up-fill"></i>
                                     </div>
-                                    <span class="nav-link-text">Alerts</span>
+                                    <span class="nav-link-text">Liked videos</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a aria-current="page" class="nav-link link-secondary"
-                                   href="{% url 'dashboard:components_buttons' %}">
+                                   href="{% url 'videos:playlist_videos' %}">
                                     <div class="nav-link-icon text-primary-emphasis">
-                                        <i class="bi bi-arrow-right-short"></i>
+                                        <i class="bi bi-music-note-list"></i>
                                     </div>
-                                    <span class="nav-link-text">Buttons</span>
+                                    <span class="nav-link-text">Playlist</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a aria-current="page" class="nav-link link-secondary"
-                                   href="{% url 'dashboard:components_cards' %}">
+                                   href="{% url 'videos:video_history' %}">
+                                    <div class="nav-link-icon text-primary-emphasis">
+                                        <i class="bi bi-clock-history"></i>
+                                    </div>
+                                    <span class="nav-link-text">History</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link link-secondary"
+                                   href="{% url 'videos:watch_later' %}">
+                                    <div class="nav-link-icon text-primary-emphasis">
+                                        <i class="bi bi-stopwatch-fill"></i>
+                                    </div>
+                                    <span class="nav-link-text">Watch Later</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link link-secondary"
+                                   href="{% url 'videos:watch_later' %}">
                                     <div class="nav-link-icon text-primary-emphasis">
                                         <i class="bi bi-arrow-right-short"></i>
                                     </div>
-                                    <span class="nav-link-text">Card</span>
+                                    <span class="nav-link-text">Queues</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a aria-current="page" class="nav-link link-secondary"
+                                   href="{% url 'videos:downloaded_videos' %}">
+                                    <div class="nav-link-icon text-primary-emphasis">
+                                        <i class="bi bi-download"></i>
+                                    </div>
+                                    <span class="nav-link-text">Downloaded Videos</span>
                                 </a>
                             </li>
                         </ul>
@@ -517,7 +646,8 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a aria-controls="tableExamples" aria-expanded="false" class="nav-link p-3" data-bs-toggle="collapse"
+                    <a aria-controls="tableExamples" aria-expanded="false" class="nav-link p-3"
+                       data-bs-toggle="collapse"
                        href="#tableExamples" role="button">
                         <div class="nav-link-icon text-primary">
                             <i class="bi bi-layout-text-window-reverse"></i>
@@ -591,7 +721,8 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a aria-controls="calendarExamples" aria-expanded="false" class="nav-link p-3" data-bs-toggle="collapse"
+                    <a aria-controls="calendarExamples" aria-expanded="false" class="nav-link p-3"
+                       data-bs-toggle="collapse"
                        href="#calendarExamples" role="button">
                         <div class="nav-link-icon text-primary">
                             <i class="bi bi-calendar-event"></i>
@@ -613,7 +744,8 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a aria-controls="chartExamples" aria-expanded="false" class="nav-link p-3" data-bs-toggle="collapse"
+                    <a aria-controls="chartExamples" aria-expanded="false" class="nav-link p-3"
+                       data-bs-toggle="collapse"
                        href="#chartExamples" role="button">
                         <div class="nav-link-icon text-primary">
                             <i class="bi bi-bar-chart"></i>
@@ -657,7 +789,7 @@
                     </div>
                 </li>
                 <li class="nav-item mt-3">
-                    <h6 class="py-1 text-secondary text-uppercase fs-7">COMMITMENTS</h6>
+                    <h6 class="py-1 text-secondary text-uppercase fs-7">ACCOUNT SETTINGS</h6>
                 </li>
                 <li class="nav-item">
                     <a aria-controls="pageExamples" aria-expanded="false" class="nav-link p-3" data-bs-toggle="collapse"
@@ -781,9 +913,10 @@
                     <i class="bi bi-rocket-takeoff lh-1 fs-3"></i>
                 </div>
                 <div class="text-center">
-                    <h3 class="h5">Admin Dashboard </h3>
-                    <p class="fs-7">Browse our Admin Dashboard Templates to unlock possibilities and enjoy exclusive
-                        features that will transform your projects to the next level.</p>
+                    <h3 class="h5">Crout Dashboard </h3>
+                    <p class="fs-7">Get enjoy exclusive content by upgrading to the premium account. However, you can
+                    try for one month, and disconnect later on
+                    </p>
                     <div class="d-grid m-0">
                         <a class="btn btn-primary rounded-pill" href="{% url 'payments:request_service' %}"
                            role="button" target="_blank">Upgrade</a>
@@ -810,6 +943,76 @@
     <script src="{% static 'assets/controller/chart-4.js' %}"></script>
     <script src="{% static 'assets/controller/map-2.js' %}"></script>
     <script src="{% static 'assets/controller/calendar-1.js' %}"></script>
+
+    <script>
+        const recordBtn = document.getElementById('recordBtn');
+        let mediaRecorder;
+
+        recordBtn.addEventListener('click', async () => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert("Your browser doesn't support audio recording!");
+                return;
+            }
+
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            const audioChunks = [];
+            mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const formData = new FormData();
+                formData.append('audio_file', audioBlob);
+
+                // Send audio to backend
+                const response = await fetch('/voice-search/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                searchBar.value = data.query; // Set search query
+            };
+
+            mediaRecorder.start();
+            setTimeout(() => mediaRecorder.stop(), 5000); // Record for 5 seconds
+        });
+
+
+        });
+    </script>
+
+
+    <script>
+
+                // Get the theme toggle button
+        const themeToggleButton = document.getElementById('theme-toggle');
+
+        // Function to toggle the dark mode class on body
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            // Update the button text based on the current theme
+            if (document.body.classList.contains('dark-mode')) {
+                themeToggleButton.textContent = 'Switch to Light Mode';
+                localStorage.setItem('theme', 'dark');  // Save the user's preference
+            } else {
+                themeToggleButton.textContent = 'Switch to Dark Mode';
+                localStorage.setItem('theme', 'light');  // Save the user's preference
+            }
+        }
+
+        // Check for saved theme preference in localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggleButton.textContent = 'Switch to Light Mode';
+        }
+
+        // Add event listener to toggle button
+        themeToggleButton.addEventListener('click', toggleTheme);
+
+
+    </script>
+
 
     <!-- BSB Body End -->
 </main>

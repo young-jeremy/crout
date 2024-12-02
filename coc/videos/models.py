@@ -6,6 +6,7 @@ from django.conf import settings
 # from like_system.models import LikesTarget
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,9 @@ class Content(models.Model):
     def __str__(self):
         # Use a more explicit check and ensure it returns a string always
         return self.title if self.title else "Content with No Title"
+
+    def get_absolute_url(self):
+        return reverse('videos:video_details', kwargs={'video_id': self.id})
 
 
 class ShortVideo(models.Model):
@@ -210,6 +214,8 @@ class Comments(models.Model):
     def __str__(self):
         return f'comment by {self.user} on {self.created_at}'[:30]
 
+    class Meta:
+        ordering = ['created_at']
 
 class VideoLikes(models.Model):
     video = models.ForeignKey(Content, on_delete=models.CASCADE)

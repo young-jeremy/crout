@@ -18,6 +18,8 @@ urlpatterns = [
     path('comments/', include('comments.urls')),
     path('notifications/', include('notifications.urls')),
     path('payments/', include('payments.urls')),
+    path('search/', include('haystack.urls')),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

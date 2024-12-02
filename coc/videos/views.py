@@ -1,14 +1,16 @@
 import datetime
+import json
 import logging
 import threading
 from datetime import datetime
+from django.http import HttpResponse, FileResponse, Http404
+
 
 import cv2
 from accounts.custom_decorators import *
 from accounts.forms import *
 from accounts.models import *
 from accounts.models import UserProfile
-# from utils import check_for_nudity
 from accounts.signals import *
 from aiohttp.web_urldispatcher import View
 from comments.forms import *
@@ -20,19 +22,22 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import JsonResponse, StreamingHttpResponse
-from django.shortcuts import get_object_or_404, HttpResponseRedirect, reverse
+from django.http import StreamingHttpResponse
+from django.shortcuts import get_object_or_404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.utils.timesince import timesince
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 # import speech_recognition as sr
-# import pysrt
 from google.cloud import speech
+from haystack.query import SearchQuerySet
 from notifications.models import Notifications
 from notifications.views import send_notification
 from requests import Request
+
+from .utils import check_for_nudity
+from services.models import Channel, Subscription
 
 logger = logging.getLogger(__name__)
 # recognizer = sr.Recognizer()
@@ -62,24 +67,58 @@ from .video_queue import VideoQueue
 
 # Testing VideoQueue functionality
 video_queue = VideoQueue()
-video_queue.add_video('video1')
-video_queue.display_queue()
-video_queue.clear_queue()
-video_queue.display_queue()
-
 
 # Initialize Firebase
 initialize_firebase()
 
 # Initialize the recognizer
 # recognizer = sr.Recognizer()
+import os
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from google.cloud import speech_v1 as speech
 
 
-# Recognize speech from audio file
-"""with sr.AudioFile('path/to/your/audiofile.wav') as source:
-    audio_data = recognizer.record(source)
-    text = recognizer.recognize_google(audio_data)
-    print("Transcription: ", text)"""
+@csrf_exempt
+def voice_search(request):
+    if request.method == 'POST' and request.FILES.get('audio_file'):
+        # Save uploaded audio file
+        audio_file = request.FILES['audio_file']
+        audio_path = os.path.join('media', 'temp_audio.wav')
+        with open(audio_path, 'wb') as f:
+            for chunk in audio_file.chunks():
+                f.write(chunk)
+
+        # Use Google Cloud Speech-to-Text API
+        client = speech.SpeechClient()
+        with open(audio_path, "rb") as f:
+            audio_content = f.read()
+
+        audio = speech.RecognitionAudio(content=audio_content)
+        config = speech.RecognitionConfig(encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,sample_rate_hertz=44100,language_code="en-US",
+        )
+
+        response = client.recognize(config=config, audio=audio)
+
+        query = response.results[0].alternatives[0].transcript if response.results else ""
+
+        # Cleanup
+        os.remove(audio_path)
+
+        return JsonResponse({"query": query})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+def search_results(request):
+    query = request.GET.get('query', '')
+    results = []  # Perform your search logic here
+    return render(request, 'search_results.html', {'query': query, 'results': results})
+
+
+def search_for_videos(request):
+    query = request.GET.get('q')
+    results = SearchQuerySet().filter(content=query).load_all()
+    return render(request, 'videos/video_search_results.html', {'results': results, 'query': query})
 
 
 def my_data_view(request):
@@ -115,7 +154,20 @@ def get_user_info(request):
 # List all categories
 def category_list(request):
     categories = Category.objects.all()
-    return render(request, 'dashboard/index.html', {'categories': categories})
+    all_videos = Category.objects.all()
+    all_gospel_videos = Content.objects.all()
+    all_videos = Content.objects.all()
+    approved_videos = Content.objects.filter(status='APPROVED')
+    rejected_videos = Content.objects.filter(status='REJECTED')
+    context = {
+        'categories': categories,
+        'all_videos': all_videos,
+        'all_gospel_videos': all_gospel_videos,
+        'approved_videos': approved_videos,
+        'rejected_videos': rejected_videos
+    }
+
+    return render(request, 'dashboard/index.html', context)
 
 
 # List content by category
@@ -144,6 +196,12 @@ def create_content(request):
         if form.is_valid():
             form.save()
             return redirect('videos:category_list')
+        Notifications.objects.create(
+            user=request.user,
+            message="Your video has been Published successfully!",
+            notification_type="video"
+        )
+
     else:
         form = ContentForm()
     return render(request, 'videos/create_content.html', {'form': form})
@@ -229,6 +287,12 @@ def index_video(video):
     video_doc.save()
 
 
+def search(request):
+    query = request.GET.get('q', '')
+    results = SearchQuerySet().filter(content=query) if query else []
+    return render(request, 'search/search.html', {'results': results, 'query': query})
+
+
 def video_search(request):
     form = VideoSearchForm(request.GET or None)
     query = request.GET.get('query')
@@ -247,9 +311,8 @@ def video_search(request):
     return render(request, 'videos/video_search_results.html', context)
 
 
-
-def video_search(request):
-    template_name = 'videos/video_search_results.html'
+def search_video(request):
+    template_name = 'search/search.html'
     query = request.GET.get('query')
     search_form = VideoSearchForm(request.GET, request.FILES)
     search_results = []
@@ -274,8 +337,8 @@ def channel_details(request, channel_id):
     channel = Channel.objects.get(pk=channel_id)
     user = request.user
     user_profile = UserProfile.objects.get_or_create(user=user)[0]
-    account_subscriptions = Subscription.objects.filter(user=user)
-    videos_uploaded = Content.objects.filter(owner=user)
+    account_subscriptions = Subscription.objects.filter(subscriber=request.user)
+    videos_uploaded = Content.objects.filter(uploader=user)
     channels_subscribed = [subscription.channel for subscription in account_subscriptions]
     playlists = Playlist.objects.all()
     context = {
@@ -290,7 +353,7 @@ def channel_details(request, channel_id):
         channel = Channel.objects.get(pk=channel_id)
         user = request.user
     else:
-        channel = Channel.objects.create(owner=request.user, )
+        channel = Channel.objects.create(pk=channel_id)
     return render(request, template_name, context)
 
 
@@ -338,7 +401,7 @@ def admin_dashboard(request):
         'videos': videos,
         # 'form': form,
     }
-    return render(request, 'videos/dashboard.html', context)
+    return render(request, 'videos/your_videos.html', context)
 
 
 def admin_panel(request):
@@ -449,7 +512,7 @@ def trending(request):
 @login_required()
 def watch_later(request):
     template_name = 'videos/watch_later.html'
-    watch_later_videos = Content.objects.filter(owner=request.user)
+    watch_later_videos = Content.objects.filter(uploader=request.user)
     return render(request, template_name, {'watch_later_videos': watch_later_videos})
 
 
@@ -575,17 +638,33 @@ def report_content(request, object_id):
         return render(request, template_name, {'form': form, })
 
 
-def post_comment(request):
-    template_name = 'videos/video_details.html'
-    if request.method == 'POST':
-        # video = Content.objects.get(pk=video_id)
-        text = request.POST['text']
-        video_id = request.POST.get('video_id')
-        Comments.objects.create(video_id=video_id, user=request.user, text=text)
-        send_notification(sender=request.user, recipient=video_id.user, video=video_id, interaction_type='comment')
-        return JsonResponse({'success': True})
+@login_required
+def post_comment(request, parent_id=None):
+    # If parent_id is provided, this is a reply to a comment
+    parent_comment = None
+    if parent_id:
+        parent_comment = get_object_or_404(Comments, id=parent_id)
 
-    return render(request, template_name)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user  # Assign the current user as the commenter
+            if parent_comment:
+                comment.parent = parent_comment  # Set the parent if this is a reply
+            comment.save()  # Save the comment
+            return redirect('videos:video_details', comment.id)  # Redirect to the page showing the comment thread
+    else:
+        form = CommentForm()
+
+    return render(request, 'videos/video_details.html', {'form': form, 'parent_comment': parent_comment})
+
+
+@login_required
+def post_detail(request, post_id):
+    # Retrieve all comments for a specific post
+    comments = Comments.objects.filter(parent__isnull=True, post_id=post_id)  # Root comments only
+    return render(request, 'post_detail.html', {'comments': comments, 'post_id': post_id})
 
 
 @login_required
@@ -740,7 +819,13 @@ def create_comment(request, video_id):
 
 
 def video_details(request, video_id):
+
     video = get_object_or_404(Content, id=video_id)
+    user = request.user
+    profile  = request.user.profile
+
+    uploader = video.uploader
+    profile_picture = profile.avatar.url if profile.avatar else None
     comments = Comments.objects.all()
     video.views += 1
     video.save()
@@ -779,6 +864,7 @@ def video_details(request, video_id):
         'main_unit': main_unit,
 
         'comment_form': comment_form,
+        'profile_picture': profile_picture,
     }
     return render(request, 'videos/video_detailS.html', context)
 
@@ -853,7 +939,7 @@ def get_video_duration(file_path):
 
 
 def short_video_list(request):
-    short_videos = ShortVideo.objects.filter(uploader=request.user)
+    short_videos = ShortVideo.objects.all()
     return render(request, 'videos/short_videos.html', {'short_videos': short_videos})
 
 
@@ -1255,3 +1341,45 @@ def clear_video_queue(request):
 def display_video_queue(request):
     queue = video_queue.display_queue()
     return render(request, 'videos/video_details).html', {'queue': video_queue.display_queue()})
+
+
+@login_required
+def user_uploaded_videos(request):
+    # Get all videos uploaded by the current user
+    uploaded_videos = Content.objects.filter(uploader=request.user)
+
+    # Render the template and pass the list of videos
+    return render(request, 'videos/your_videos.html', {'uploaded_videos': uploaded_videos})
+
+
+def download_video(request, video_id):
+    # Get the video object
+    video = get_object_or_404(Content, pk=video_id)
+
+    # Get the path to the video file
+    video_path = video.video_file.path
+
+    # Check if the video exists
+    if not os.path.exists(video_path):
+        raise Http404("Video not found")
+
+    # Open the video file for download
+    video_file = open(video_path, 'rb')
+    response = FileResponse(video_file, content_type='video/mp4')
+
+    # Set headers for download
+    response['Content-Disposition'] = f'attachment; filename="{video.title}.mp4"'
+    return response
+
+
+def downloaded_videos(request):
+    # If the form is submitted with a selected file
+    if request.method == 'POST' and request.FILES.get('video_file'):
+        # Get the uploaded video file from the form
+        video_file = request.FILES['video_file']
+
+        # Pass the video to the template so that it can be played
+        return render(request, 'videos/downloaded_videos.html', {'selected_video': video_file})
+
+    # If no file is uploaded, render the empty form
+    return render(request, 'videos/downloaded_videos.html')
